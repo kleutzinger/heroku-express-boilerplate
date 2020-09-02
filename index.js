@@ -5,7 +5,11 @@ const app = express();
 // api code
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Hello World' + Date.now());
+});
+
+app.get('/create', (req, res) => {
+  res.send('create' + Date.now());
 });
 
 //
