@@ -10,14 +10,11 @@ dotenv.config();
 
 var fs = require('fs');
 
-var cloudinary = require('cloudinary');
-cloudinary.config({
-  cloud_name : 'hrvstzfty',
-  api_key    : '566594632571262',
-  api_secret : process.env.CLOUDINARY_SECRET
-});
 app.use(bodyParser.json());
+const multer = require('multer');
 app.set('view engine', 'pug');
+app.use(multer({ dest: __dirname + '/tmp/' }).any());
+
 app.use(express.static('web'));
 
 app.use(morgan('combined'));
@@ -26,28 +23,18 @@ app.get('/', function(req, res) {
   res.render('home', {});
 });
 
-app.post('/', function(req, res, next) {
-  stream = cloudinary.uploader.upload_stream(
-    function(result) {
-      console.log(result);
-      res.send(
-        'Done:<br/> <img src="' +
-          result.url +
-          '"/><br/>' +
-          cloudinary.image(result.public_id, {
-            format : 'png',
-            width  : 100,
-            height : 130,
-            crop   : 'fill'
-          })
-      );
-    },
-    { public_id: req.body.title }
-  );
-  fs
-    .createReadStream(req.files.image.path, { encoding: 'binary' })
-    .on('data', stream.write)
-    .on('end', stream.end);
+app.post('/', function(req, res) {
+  console.log(req.files);
+
+  var files = req.files.file;
+  if (Array.isArray(files)) {
+    // response with multiple files (old form may send multiple files)
+    console.log('Got ' + files.length + ' files');
+  } else {
+    // dropzone will send multiple requests per default
+    console.log('Got one file');
+  }
+  res.sendStatus(200);
 });
 
 app.listen(PORT, () => {
