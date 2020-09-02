@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "@slippi/slippi-js": "^5.0.5",
+    "lodash": "^4.17.19",
+    "lowdb": "^1.0.0",
+    "pug": "^3.0.0",
+    "pureimage": "^0.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
