@@ -13,7 +13,7 @@ var fs = require('fs');
 app.use(bodyParser.json());
 const multer = require('multer');
 app.set('view engine', 'pug');
-app.use(multer({ dest: __dirname + '/tmp/' }).any());
+app.use(multer({ dest: 'tmp/' }).any());
 
 app.use(express.static('web'));
 
