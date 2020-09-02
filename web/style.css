@@ -1,0 +1,26 @@
+.footer {
+  float: bottom;
+  position: absolute;
+  bottom: 2em;
+}
+
+li p {
+  display: inline;
+}
+
+img.stage_thumb {
+  width: 150px;
+}
+
+button.red {
+  /* width: 10%; */
+  color: white;
+  background-color: #800;
+  border-color: #800;
+}
+div.ts-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}

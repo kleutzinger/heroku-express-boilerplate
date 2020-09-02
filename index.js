@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 var morgan = require('morgan');
 const dotenv = require('dotenv');
-// dotenv.config();
+dotenv.config();
 
 // api code
 
@@ -16,20 +16,14 @@ cloudinary.config({
   api_key    : '566594632571262',
   api_secret : process.env.CLOUDINARY_SECRET
 });
-console.log(process.env.CLOUDINARY_SECRET);
 app.use(bodyParser.json());
+app.set('view engine', 'pug');
+app.use(express.static('web'));
+
 app.use(morgan('combined'));
 
 app.get('/', function(req, res) {
-  res.send(
-    '<form method="post" enctype="multipart/form-data">' +
-      '<p>Public ID: <input type="text" name="title"/></p>' +
-      '<p>Image: <input type="file" name="image"/></p>' +
-      '<p><input type="submit" value="Upload"/></p>' +
-      '</form><p>' +
-      process.env.CLOUDINARY_SECRET +
-      '</p>'
-  );
+  res.render('home', {});
 });
 
 app.post('/', function(req, res, next) {
