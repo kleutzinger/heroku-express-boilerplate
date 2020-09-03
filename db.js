@@ -18,6 +18,7 @@ const create_str =
    id SERIAL NOT NULL PRIMARY KEY,
    name           TEXT    NOT NULL DEFAULT '',
    bracket_url    TEXT    NOT NULL DEFAULT '',
+   slp_filecount INT NOT NULL DEFAULT 0,
    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 `;
@@ -27,13 +28,13 @@ dotenv.config();
 
 const { Pool, Client } = require('pg');
 
-const client = new Client({
-  connectionString : process.env.DATABASE_URL,
-  ssl              : {
-    rejectUnauthorized : false
-  }
-});
-client.connect();
+// const client = new Client({
+//   connectionString : process.env.DATABASE_URL,
+//   ssl              : {
+//     rejectUnauthorized : false
+//   }
+// });
+// client.connect();
 
 function new_tournament(name = 'none', url = 'https://smash.gg') {
   const text =
@@ -65,6 +66,19 @@ function update_tournament(id, key, val) {
     .catch((e) => console.error(e.stack));
 }
 
-new_tournament();
-update_tournament(1, 'name', 'ponguuuuuuuuuuuus');
+function list_tournaments(client, callback) {
+  client
+    .query('SELECT * from tournament;')
+    .then((res) => {
+      // console.log(res.rows[0]);
+      callback(res.rows);
+    })
+    .catch((e) => console.error(e.stack));
+}
+
+// new_tournament();
+// update_tournament(1, 'name', 'ponguuuuuuuuuuuus');
+// list_tournaments(console.log);
 // client.end();
+
+module.exports = { list_tournaments };

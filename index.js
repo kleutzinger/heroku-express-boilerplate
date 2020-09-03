@@ -23,6 +23,8 @@ const pool = new Pool({
   }
 });
 
+const db = require('./db.js');
+
 app.use(express.static('web'));
 
 app.use(morgan('combined'));
@@ -48,10 +50,24 @@ app.post('/', function(req, res) {
 app.get('/db', async (req, res) => {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM test_table');
+    const result = await client.query('SELECT * FROM tournament');
     const results = { results: result ? result.rows : null };
     res.json(results);
     client.release();
+  } catch (err) {
+    console.error(err);
+    res.send('Error ' + err);
+  }
+});
+
+app.get('/db2', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    db.list_tournaments(client, (out) => {
+      // console.log(out);
+      // client.release();
+      res.json(out);
+    });
   } catch (err) {
     console.error(err);
     res.send('Error ' + err);
