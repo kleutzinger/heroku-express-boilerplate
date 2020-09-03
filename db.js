@@ -26,6 +26,12 @@ const create_str =
 const dotenv = require('dotenv');
 dotenv.config();
 
+const { Sequelize } = require('sequelize');
+
+// Option 1: Passing a connection URI
+const sequelize = new Sequelize(process.env.DATABASE_URL); // Example for postgres
+
+sequelize.authenticate().then(console.log).catch((err) => console.log(err));
 const { Pool, Client } = require('pg');
 
 // const client = new Client({
