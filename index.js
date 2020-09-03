@@ -12,8 +12,16 @@ var fs = require('fs');
 
 app.use(bodyParser.json());
 const multer = require('multer');
+
 app.set('view engine', 'pug');
 app.use(multer({ dest: './tmp' }).any());
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString : process.env.DATABASE_URL,
+  ssl              : {
+    rejectUnauthorized : false
+  }
+});
 
 app.use(express.static('web'));
 
@@ -35,6 +43,19 @@ app.post('/', function(req, res) {
     console.log('Got one file');
   }
   res.sendStatus(200);
+});
+
+app.get('/db', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM test_table');
+    const results = { results: result ? result.rows : null };
+    res.json(results);
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.send('Error ' + err);
+  }
 });
 
 app.listen(PORT, () => {
