@@ -36,7 +36,7 @@ const { Pool, Client } = require('pg');
 // });
 // client.connect();
 
-function new_tournament(name = 'none', url = 'https://smash.gg') {
+function new_tournament(client, name = 'none', url = 'https://smash.gg') {
   const text =
     'INSERT INTO tournament(name, bracket_url) VALUES($1, $2) RETURNING *';
   const values = [ name, url ];
@@ -50,7 +50,7 @@ function new_tournament(name = 'none', url = 'https://smash.gg') {
     .catch((e) => console.error(e.stack));
 }
 
-function update_tournament(id, key, val) {
+function update_tournament(client, id, key, val) {
   const text = `UPDATE tournament
         SET ${key} = '${val}'
         WHERE id = ${id}
@@ -68,16 +68,23 @@ function update_tournament(id, key, val) {
 
 function list_tournaments(client, callback) {
   client
-    .query('SELECT * from tournament;')
+    .query('SELECT * from tournament order by created_at desc;')
     .then((res) => {
       // console.log(res.rows[0]);
       callback(res.rows);
     })
     .catch((e) => console.error(e.stack));
 }
+// const client = new Client({
+//   connectionString : process.env.DATABASE_URL,
+//   ssl              : {
+//     rejectUnauthorized : false
+//   }
+// });
+// client.connect();
 
-// new_tournament();
-// update_tournament(1, 'name', 'ponguuuuuuuuuuuus');
+// new_tournament(client);
+// update_tournament(client, 1, 'name', 'ponguuuuuuuuuuuus');
 // list_tournaments(console.log);
 // client.end();
 
