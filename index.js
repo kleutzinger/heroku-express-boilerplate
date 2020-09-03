@@ -1,20 +1,21 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const PORT = process.env.PORT || 5000;
 const app = express();
 const bodyParser = require('body-parser');
-var morgan = require('morgan');
-const dotenv = require('dotenv');
-dotenv.config();
+const morgan = require('morgan');
+const _ = require('lodash');
+
+const uploadRouter = require('./upload_ingester.js');
 
 // api code
 
 var fs = require('fs');
-
 app.use(bodyParser.json());
-const multer = require('multer');
 
 app.set('view engine', 'pug');
-app.use(multer({ dest: './tmp' }).any());
+// app.use(multer({ dest: './tmp' }).any());
 const { Pool } = require('pg');
 const pool = new Pool({
   connectionString : process.env.DATABASE_URL,
@@ -25,26 +26,13 @@ const pool = new Pool({
 
 const db = require('./db.js');
 
+app.use(morgan('tiny'));
 app.use(express.static('web'));
 
-app.use(morgan('combined'));
+app.use('/', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
 
 app.get('/', function(req, res) {
   res.render('home', {});
-});
-
-app.post('/', function(req, res) {
-  console.log(req.files);
-
-  var files = req.files.file;
-  if (Array.isArray(files)) {
-    // response with multiple files (old form may send multiple files)
-    console.log('Got ' + files.length + ' files');
-  } else {
-    // dropzone will send multiple requests per default
-    console.log('Got one file');
-  }
-  res.sendStatus(200);
 });
 
 app.get('/db', async (req, res) => {
