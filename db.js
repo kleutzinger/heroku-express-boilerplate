@@ -26,6 +26,9 @@ const create_str =
 const dotenv = require('dotenv');
 dotenv.config();
 
+var Redis = require('ioredis');
+var redis = new Redis(process.env.REDIS_URL);
+
 const { Pool, Client } = require('pg');
 
 // const client = new Client({
