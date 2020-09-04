@@ -12,4 +12,18 @@ Dropzone.options.dropzone = {
 
 $(document).ready(function() {
   init_socket_io();
+  fetch('/api/history', {
+    method : 'get'
+  })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      data.map((history_item) => {
+        const { dl_url } = history_item;
+        $(`<div><a href="${dl_url}">${dl_url}</a></div>`).appendTo(
+          '#history_list'
+        );
+      });
+    });
 });

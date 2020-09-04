@@ -10,7 +10,7 @@ const { basename } = require('path');
 const fetch = require('node-fetch');
 const _ = require('lodash');
 const FormData = require('form-data');
-
+const { new_upload } = require('./api.js');
 if (!existsSync(tmpdir)) {
   mkdirSync(tmpdir, { recursive: true });
 }
@@ -48,6 +48,9 @@ async function processUpload(_path, io) {
         if (dl_url) {
           console.log(dl_url);
           io.sockets.emit('new_upload', { dl_url });
+          new_upload(dl_url).then(() => {
+            // console.log('uploaded to history');
+          });
         }
       })
       .catch((err) => {

@@ -1,17 +1,3 @@
-// what to store as metadata for slippi files in database
-// url
-// original file name
-// data type:
-//    application/slippi
-// long description
-// date added
-
-// tournament info to store
-// creation date
-// randomized name (customizable)
-// bracket_urlsmash.gg url
-// id
-
 const create_str = `
    CREATE TABLE tournament(
    id SERIAL NOT NULL PRIMARY KEY,
@@ -24,23 +10,15 @@ const create_str = `
 
 const slip_str = `
    CREATE TABLE upload_history(
-   id SERIAL NOT NULL PRIMARY KEY,
-   name           TEXT    NOT NULL DEFAULT '',
-   bracket_url    TEXT    NOT NULL DEFAULT '',
-   slp_filecount INT NOT NULL DEFAULT 0,
+   id         SERIAL NOT NULL PRIMARY KEY,
+   dl_url     TEXT    NOT NULL DEFAULT '',
    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);`;
+);
+`;
 const dotenv = require('dotenv');
 dotenv.config();
+const pool = require('./db_setup.js');
 const app = require('express').Router();
-
-const { Pool } = require('pg');
-const pool = new Pool({
-  connectionString : process.env.DATABASE_URL,
-  ssl              : {
-    rejectUnauthorized : false
-  }
-});
 
 function new_tournament(client, name = 'none', url = 'https://smash.gg') {
   const text =
@@ -54,6 +32,17 @@ function new_tournament(client, name = 'none', url = 'https://smash.gg') {
       // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
     })
     .catch((e) => console.error(e.stack));
+}
+
+async function new_upload(dl_url, metadata = {}) {
+  try {
+    const client = await pool.connect();
+    const text = 'INSERT INTO upload_history(dl_url) VALUES($1);';
+    const values = [ dl_url ];
+    return client.query(text, values);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function update_tournament(client, id, key, val) {
@@ -82,30 +71,33 @@ function list_tournaments(client, callback) {
     .catch((e) => console.error(e.stack));
 }
 
+async function get_upload_history() {
+  try {
+    const client = await pool.connect();
+    const text = 'SELECT * from upload_history order by created_at desc;';
+    resp = await client.query(text);
+    return resp;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 app.get('/db', async (req, res) => {
   try {
     const client = await pool.connect();
     const result = await client.query('SELECT * FROM tournament');
     const results = { results: result ? result.rows : null };
     res.json(results);
-    client.release();
+    client.end();
   } catch (err) {
     console.error(err);
     res.send('Error ' + err);
   }
 });
 
-// const client = new Client({
-//   connectionString : process.env.DATABASE_URL,
-//   ssl              : {
-//     rejectUnauthorized : false
-//   }
-// });
-// client.connect();
+app.get('/history', async (req, res) => {
+  const data = await get_upload_history();
+  res.json(data.rows);
+});
 
-// new_tournament(client);
-// update_tournament(client, 1, 'name', 'ponguuuuuuuuuuuus');
-// list_tournaments(console.log);
-// client.end();
-
-module.exports = app;
+module.exports = { apiRouter: app, new_upload, get_upload_history };

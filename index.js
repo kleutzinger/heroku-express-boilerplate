@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.set('view engine', 'pug');
 // app.use(multer({ dest: './tmp' }).any());
 
-const dbRouter = require('./db.js');
+const { apiRouter } = require('./api.js');
 
 app.use(express.static('web'));
 app.use(morgan('tiny'));
@@ -31,7 +31,7 @@ const io = socketIO(server);
 
 const uploadRouter = require('./upload_ingester.js')(io);
 app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
-app.use('/api', dbRouter);
+app.use('/api', apiRouter);
 
 app.get('/', function(req, res) {
   res.render('home', {});
@@ -42,4 +42,3 @@ io.on('connection', (socket) => {
   // socket.emit('history', {});
   socket.on('disconnect', () => console.log('Client disconnected'));
 });
-// setInterval(() => io.emit('ping', new Date().toTimeString()), 1000);
