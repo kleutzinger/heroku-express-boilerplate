@@ -1,13 +1,13 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
+const socketIO = require('socket.io');
 const PORT = process.env.PORT || 5000;
 const app = express();
+
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const _ = require('lodash');
-
-const uploadRouter = require('./upload_ingester.js');
 
 // api code
 
@@ -29,7 +29,15 @@ const db = require('./db.js');
 app.use(express.static('web'));
 app.use(morgan('tiny'));
 
-app.use('/', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
+const server = app.listen(PORT, () => {
+  console.log(`server listening on port ${PORT}`);
+  console.log('melee server spectate http://localhost:' + PORT);
+});
+/// -- SOCKETZ
+const io = socketIO(server);
+
+const uploadRouter = require('./upload_ingester.js')(io);
+app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
 
 app.get('/', function(req, res) {
   res.render('home', {});
@@ -62,7 +70,16 @@ app.get('/db2', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`server listening on port ${PORT}`);
-  console.log('melee server spectate http://localhost:' + PORT);
+io.on('connection', (socket) => {
+  console.log('Client connected');
+  socket.emit('history', {});
+  socket.on('disconnect', () => console.log('Client disconnected'));
 });
+
+app.post('/socket/upload', (req, res) => {
+  io.emit('upload', req.body);
+});
+
+app.post('/socket/:channel', (req, res) => {});
+
+// setInterval(() => io.emit('ping', new Date().toTimeString()), 1000);

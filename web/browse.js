@@ -10,4 +10,6 @@ Dropzone.options.dropzone = {
   }
 };
 
-$(document).ready(function() {});
+$(document).ready(function() {
+  init_socket_io();
+});

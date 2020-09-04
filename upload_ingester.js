@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
+const app = require('express').Router();
 const multer = require('multer');
 const { nanoid } = require('nanoid/non-secure');
 const tmpdir = 'tmp';
@@ -9,8 +10,6 @@ const { basename } = require('path');
 const fetch = require('node-fetch');
 const _ = require('lodash');
 const FormData = require('form-data');
-
-const app = require('express').Router();
 
 if (!existsSync(tmpdir)) {
   mkdirSync(tmpdir, { recursive: true });
@@ -33,21 +32,7 @@ const upload = multer({
   limits  : { fileSize: 1024 * 1024 * 10 }
 });
 
-app.post('/', upload.any(), async function(req, res) {
-  try {
-    let files = req.files || [ req.file ];
-    _.map(files, (f) => {
-      processUpload(f.path);
-    });
-    console.log('Got ' + files.length + ' files');
-    res.sendStatus(200);
-  } catch (err) {
-    console.log('file error, or no file?');
-    res.sendStatus(400);
-  }
-});
-
-async function processUpload(_path) {
+async function processUpload(_path, io) {
   try {
     const output_filename = basename(_path);
     const formData = new FormData();
@@ -59,8 +44,10 @@ async function processUpload(_path) {
       })
       .then(function(json) {
         // file uploaded succcessfully
-        if (json.dl_url) {
-          console.log(json.dl_url);
+        const { dl_url } = json;
+        if (dl_url) {
+          console.log(dl_url);
+          io.sockets.emit('new_upload', dl_url);
         }
       })
       .catch((err) => {
@@ -71,4 +58,29 @@ async function processUpload(_path) {
   }
 }
 
-module.exports = app;
+var returnRouter = function(io) {
+  app.post('/', upload.any(), async function(req, res) {
+    try {
+      let files = req.files || [ req.file ];
+      _.map(files, (f) => {
+        processUpload(f.path, io);
+      });
+      console.log('Got ' + files.length + ' files');
+      res.sendStatus(200);
+    } catch (err) {
+      console.log('file error, or no file?');
+      res.sendStatus(400);
+    }
+  });
+
+  app.get('/new_upload', function(req, res) {
+    console.log('Post request hit.');
+    // res.contentType('text/xml');
+    // res.send(''+req.body+'');
+    res.json('emitted');
+  });
+
+  return app;
+};
+
+module.exports = returnRouter;
