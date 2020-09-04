@@ -11,6 +11,8 @@ const fetch = require('node-fetch');
 const _ = require('lodash');
 const FormData = require('form-data');
 const { new_upload } = require('./api.js');
+const { handle_slippi_file } = require('./slippi_wrangler.js');
+
 if (!existsSync(tmpdir)) {
   mkdirSync(tmpdir, { recursive: true });
 }
@@ -51,6 +53,9 @@ async function processUpload(_path, io) {
           new_upload(dl_url).then(() => {
             // console.log('uploaded to history');
           });
+          if (_path.endsWith('.slp')) {
+            handle_slippi_file(_path);
+          }
         }
       })
       .catch((err) => {

@@ -56,7 +56,7 @@ async function new_upload(dl_url, metadata = {}) {
 
 async function new_metadata(filename, metadata = {}) {
   try {
-    filename = dl_url.split('/').pop();
+    filename = filename.split('/').pop();
     const client = await pool.connect();
     const text = 'INSERT INTO slippi_meta(filename, metadata) VALUES($1, $2);';
     const values = [ filename, metadata ];
@@ -95,7 +95,7 @@ function list_tournaments(client, callback) {
 async function get_upload_history() {
   try {
     const client = await pool.connect();
-    const text = 'SELECT * from upload_history order by created_at desc;';
+    const text = `SELECT * from upload_history INNER JOIN slippi_meta on upload_history.filename=slippi_meta.filename ORDER BY created_at desc;`;
     resp = await client.query(text);
     return resp;
   } catch (err) {
@@ -122,7 +122,7 @@ app.get('/history', async (req, res) => {
 });
 
 module.exports = {
-  apiRouter: app,
+  apiRouter          : app,
   new_upload,
   get_upload_history,
   new_metadata

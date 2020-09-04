@@ -19,9 +19,15 @@ $(document).ready(function() {
       return response.json();
     })
     .then(function(data) {
+      console.log(data);
+      //prettier-ignore
       data.map((history_item) => {
+        const p1tag = _.get(history_item, 'metadata.slp_metadata.players[0].names.netplay');
+        const p2tag = _.get(history_item, 'metadata.slp_metadata.players[1].names.netplay');
+        const when = _.get(history_item, 'metadata.slp_metadata.startAt');
         const { dl_url } = history_item;
-        $(`<div><a href="${dl_url}">${dl_url}</a></div>`).appendTo(
+        const display_info = [p1tag, 'vs', p2tag, '@', new Date(when).toLocaleString()].join(' ')
+        $(`<div><a href="${dl_url}">${dl_url}</a><span>${display_info}</span></div>`).appendTo(
           '#history_list'
         );
       });
