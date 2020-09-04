@@ -49,9 +49,10 @@ async function new_upload(dl_url, metadata = {}) {
     const text = 'INSERT INTO upload_history(dl_url, filename) VALUES($1, $2);';
     const values = [ dl_url, filename ];
     const resp = await client.query(text, values);
-    client.end();
+    await client.end();
     return resp;
   } catch (err) {
+    client.end();
     console.log(err);
   }
 }
@@ -63,7 +64,7 @@ async function new_metadata(filename, metadata = {}) {
     const text = 'INSERT INTO slippi_meta(filename, metadata) VALUES($1, $2);';
     const values = [ filename, metadata ];
     const resp = await client.query(text, values);
-    client.end();
+    await client.end();
     return resp;
   } catch (err) {
     client.end();
@@ -102,26 +103,13 @@ async function get_upload_history() {
     const client = await pool.connect();
     const text = `SELECT * from upload_history INNER JOIN slippi_meta on upload_history.filename=slippi_meta.filename ORDER BY created_at desc;`;
     resp = await client.query(text);
-    client.end();
+    await client.end();
     return resp;
   } catch (err) {
     client.end();
     console.log(err);
   }
 }
-
-app.get('/db', async (req, res) => {
-  try {
-    const client = await pool.connect();
-    const result = await client.query('SELECT * FROM tournament');
-    const results = { results: result ? result.rows : null };
-    res.json(results);
-    client.end();
-  } catch (err) {
-    console.error(err);
-    res.send('Error ' + err);
-  }
-});
 
 app.get('/history', async (req, res) => {
   const data = await get_upload_history();
