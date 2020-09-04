@@ -76,13 +76,6 @@ var returnRouter = function(io) {
     }
   });
 
-  app.get('/new_upload', function(req, res) {
-    console.log('Post request hit.');
-    // res.contentType('text/xml');
-    // res.send(''+req.body+'');
-    res.json('emitted');
-  });
-
   return app;
 };
 

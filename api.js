@@ -8,12 +8,20 @@ const create_str = `
 );
 `;
 
-const slip_str = `
+const upload_history = `
    CREATE TABLE upload_history(
    id         SERIAL NOT NULL PRIMARY KEY,
    dl_url     TEXT    NOT NULL DEFAULT '',
+   filename   text    NOT NULL DEFAULT '',
    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+`;
+const slippi_meta = `
+  CREATE TABLE slippi_meta(
+  id         SERIAL NOT NULL PRIMARY KEY,
+  filename   text    NOT NULL DEFAULT '',
+  metadata   jsonb   not null default '{}'::jsonb
+  );
 `;
 const dotenv = require('dotenv');
 dotenv.config();
@@ -36,9 +44,10 @@ function new_tournament(client, name = 'none', url = 'https://smash.gg') {
 
 async function new_upload(dl_url, metadata = {}) {
   try {
+    const filename = dl_url.split('/').pop();
     const client = await pool.connect();
-    const text = 'INSERT INTO upload_history(dl_url) VALUES($1);';
-    const values = [ dl_url ];
+    const text = 'INSERT INTO upload_history(dl_url, filename) VALUES($1, $2);';
+    const values = [ dl_url, filename ];
     return client.query(text, values);
   } catch (err) {
     console.log(err);
