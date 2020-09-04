@@ -21,7 +21,9 @@ const storage = multer.diskStorage({
     cb(null, tmpdir);
   },
   filename    : function(req, file, cb) {
-    cb(null, `${nanoid(7)}-${file.originalname}`);
+    let filename = file.originalname;
+    filename = filename.replace(/[^a-z0-9\.-]/gi, '_');
+    cb(null, `${nanoid(7)}-${filename}`);
     // cb(null, `${file.originalname}`);
   }
 });
@@ -47,28 +49,23 @@ app.post('/', upload.any(), async function(req, res) {
 
 async function processUpload(_path) {
   try {
-    const download_server = 'http://kevbot.xyz/download/slp';
     const output_filename = basename(_path);
-    const download_url = download_server + '/' + output_filename;
     const formData = new FormData();
 
     formData.append('files[]', fs.createReadStream(_path), basename(_path));
-    // await rc.post(process.env.SECRET_UPLOAD_KB, formData, {
-    //   headers : formData.getHeaders()
-    // });
-
     fetch(process.env.SECRET_UPLOAD_KB, { method: 'POST', body: formData })
       .then(function(res) {
         return res.json();
       })
       .then(function(json) {
-        console.log(json);
+        // file uploaded succcessfully
+        if (json.dl_url) {
+          console.log(json.dl_url);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-
-    console.log(_path, '\n', download_url);
   } catch (err) {
     console.log(err);
   }

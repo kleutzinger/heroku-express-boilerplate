@@ -26,8 +26,8 @@ const pool = new Pool({
 
 const db = require('./db.js');
 
-app.use(morgan('tiny'));
 app.use(express.static('web'));
+app.use(morgan('tiny'));
 
 app.use('/', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
 

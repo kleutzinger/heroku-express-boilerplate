@@ -1,19 +1,13 @@
-$('#launchargs1598404092018').text('hi');
-console.log($('select'));
+Dropzone.options.dropzone = {
+  paramName          : 'file', // The name that will be used to transfer the file
+  maxFilesize        : 10, // 10 mb
+  dictDefaultMessage : 'drag .slp files here<br>or click to upload', // MB
+  init               : function() {
+    this.on('success', function(file, resp) {
+      console.log(file, resp);
+      this.removeFile(file);
+    });
+  }
+};
 
-$(document).ready(function() {
-  $('#launchargs1598404092018').val('hi');
-  console.log($('select'));
-
-  var newOptions = {
-    ts           : 'FrameStart',
-    'From Start' : 'start',
-    other        : 'other'
-  };
-
-  var $el = $('#launchargs1598404092018');
-  $el.empty(); // remove old options
-  $.each(newOptions, function(key, value) {
-    $el.append($('<option></option>').attr('value', value).text(key));
-  });
-});
+$(document).ready(function() {});
