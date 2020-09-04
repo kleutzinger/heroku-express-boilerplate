@@ -16,15 +16,8 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'pug');
 // app.use(multer({ dest: './tmp' }).any());
-const { Pool } = require('pg');
-const pool = new Pool({
-  connectionString : process.env.DATABASE_URL,
-  ssl              : {
-    rejectUnauthorized : false
-  }
-});
 
-const db = require('./db.js');
+const dbRouter = require('./db.js');
 
 app.use(express.static('web'));
 app.use(morgan('tiny'));
@@ -38,36 +31,10 @@ const io = socketIO(server);
 
 const uploadRouter = require('./upload_ingester.js')(io);
 app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
+app.use('/api', dbRouter);
 
 app.get('/', function(req, res) {
   res.render('home', {});
-});
-
-app.get('/db', async (req, res) => {
-  try {
-    const client = await pool.connect();
-    const result = await client.query('SELECT * FROM tournament');
-    const results = { results: result ? result.rows : null };
-    res.json(results);
-    client.release();
-  } catch (err) {
-    console.error(err);
-    res.send('Error ' + err);
-  }
-});
-
-app.get('/db2', async (req, res) => {
-  try {
-    const client = await pool.connect();
-    db.list_tournaments(client, (out) => {
-      // console.log(out);
-      // client.release();
-      res.json(out);
-    });
-  } catch (err) {
-    console.error(err);
-    res.send('Error ' + err);
-  }
 });
 
 io.on('connection', (socket) => {

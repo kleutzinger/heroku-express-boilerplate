@@ -12,9 +12,8 @@
 // bracket_urlsmash.gg url
 // id
 
-const create_str =
-  '' +
-  `CREATE TABLE tournament(
+const create_str = `
+   CREATE TABLE tournament(
    id SERIAL NOT NULL PRIMARY KEY,
    name           TEXT    NOT NULL DEFAULT '',
    bracket_url    TEXT    NOT NULL DEFAULT '',
@@ -23,22 +22,25 @@ const create_str =
 );
 `;
 
+const slip_str = `
+   CREATE TABLE upload_history(
+   id SERIAL NOT NULL PRIMARY KEY,
+   name           TEXT    NOT NULL DEFAULT '',
+   bracket_url    TEXT    NOT NULL DEFAULT '',
+   slp_filecount INT NOT NULL DEFAULT 0,
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);`;
 const dotenv = require('dotenv');
 dotenv.config();
+const app = require('express').Router();
 
-var Redis = require('ioredis');
-var redis = new Redis(process.env.REDIS_URL);
-
-// Option 1: Passing a connection URI
-const { Pool, Client } = require('pg');
-
-// const client = new Client({
-//   connectionString : process.env.DATABASE_URL,
-//   ssl              : {
-//     rejectUnauthorized : false
-//   }
-// });
-// client.connect();
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString : process.env.DATABASE_URL,
+  ssl              : {
+    rejectUnauthorized : false
+  }
+});
 
 function new_tournament(client, name = 'none', url = 'https://smash.gg') {
   const text =
@@ -79,6 +81,20 @@ function list_tournaments(client, callback) {
     })
     .catch((e) => console.error(e.stack));
 }
+
+app.get('/db', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM tournament');
+    const results = { results: result ? result.rows : null };
+    res.json(results);
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.send('Error ' + err);
+  }
+});
+
 // const client = new Client({
 //   connectionString : process.env.DATABASE_URL,
 //   ssl              : {
@@ -92,4 +108,4 @@ function list_tournaments(client, callback) {
 // list_tournaments(console.log);
 // client.end();
 
-module.exports = { list_tournaments };
+module.exports = app;
