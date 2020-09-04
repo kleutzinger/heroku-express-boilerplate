@@ -11,6 +11,9 @@ Dropzone.options.dropzone = {
 };
 
 $(document).ready(function() {
+  if (window.location.href.includes('localhost:')) {
+    $(document.body).css('background-color', '#add');
+  }
   init_socket_io();
   fetch('/api/history', {
     method : 'get'

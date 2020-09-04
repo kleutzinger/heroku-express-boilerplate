@@ -7,13 +7,15 @@ html
     <script src="https://cdn.jsdelivr.net/npm/dropzone@5.7.2/dist/min/dropzone.min.js" integrity="sha256-VBW6wgQ/wqxKuy5M87Uhn5bvzBmeXgWVQiwAqPLUjfo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.7.2/dist/dropzone.min.css">
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="/mvp.css">
+    //- <link rel="stylesheet" href="/mvp.css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
     script(type='text/javascript', src="/client-sockets.js")
     script(type='text/javascript', src="/browse.js")
     title= title
   body
-    h2 Upload your files here,<br>They will remain on this page for everyone to see 
-    a(href='/api/history') view tournament database
+    h4 Upload your files here,<br>They will remain on this page for everyone to see 
+    a(href='/api/history') view tournament database<br>
+    a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
     <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
     h2 Download links below
     div#history_list
