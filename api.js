@@ -54,6 +54,18 @@ async function new_upload(dl_url, metadata = {}) {
   }
 }
 
+async function new_metadata(filename, metadata = {}) {
+  try {
+    filename = dl_url.split('/').pop();
+    const client = await pool.connect();
+    const text = 'INSERT INTO slippi_meta(filename, metadata) VALUES($1, $2);';
+    const values = [ filename, metadata ];
+    return client.query(text, values);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function update_tournament(client, id, key, val) {
   const text = `UPDATE tournament
         SET ${key} = '${val}'
@@ -109,4 +121,9 @@ app.get('/history', async (req, res) => {
   res.json(data.rows);
 });
 
-module.exports = { apiRouter: app, new_upload, get_upload_history };
+module.exports = {
+  apiRouter: app,
+  new_upload,
+  get_upload_history,
+  new_metadata
+};

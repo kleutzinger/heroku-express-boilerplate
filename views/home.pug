@@ -11,9 +11,10 @@ html
     script(type='text/javascript', src="/browse.js")
     title= title
   body
-    h2 this is the homepage, list tournaments below
+    h2 Upload your files here,<br>They will remain on this page for everyone to see 
     a(href='/db2') view tournament database
     <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
+    h2 Download links below
     div#history_list
     //- <form method="post" action="http://kevbot.xyz/feed/me/secrets/upload" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>
 
