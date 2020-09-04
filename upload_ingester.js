@@ -2,7 +2,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 const app = require('express').Router();
 const multer = require('multer');
-const { nanoid } = require('nanoid/non-secure');
+const { customAlphabet } = require('nanoid/non-secure');
+const nanoid = customAlphabet(
+  '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_',
+  7
+);
 const tmpdir = 'tmp';
 const { existsSync, mkdirSync } = require('fs');
 const fs = require('fs');
@@ -24,7 +28,7 @@ const storage = multer.diskStorage({
   filename    : function(req, file, cb) {
     let filename = file.originalname;
     filename = filename.replace(/[^a-z0-9\.-]/gi, '_');
-    cb(null, `${nanoid(7)}-${filename}`);
+    cb(null, `${nanoid()}_${filename}`);
     // cb(null, `${file.originalname}`);
   }
 });
