@@ -72,14 +72,7 @@ app.get('/db2', async (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('Client connected');
-  socket.emit('history', {});
+  // socket.emit('history', {});
   socket.on('disconnect', () => console.log('Client disconnected'));
 });
-
-app.post('/socket/upload', (req, res) => {
-  io.emit('upload', req.body);
-});
-
-app.post('/socket/:channel', (req, res) => {});
-
 // setInterval(() => io.emit('ping', new Date().toTimeString()), 1000);

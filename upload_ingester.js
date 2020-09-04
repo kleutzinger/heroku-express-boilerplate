@@ -47,7 +47,7 @@ async function processUpload(_path, io) {
         const { dl_url } = json;
         if (dl_url) {
           console.log(dl_url);
-          io.sockets.emit('new_upload', dl_url);
+          io.sockets.emit('new_upload', { dl_url });
         }
       })
       .catch((err) => {
