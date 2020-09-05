@@ -11,7 +11,10 @@
 curl -i -F 'files[]=@hi.txt' https://uguu.se/upload.php
 curl -i -F 'file=@hi.txt' https://tmp.ninja/api.php?d=upload
 ```
-- [ ] generate thumbnails from slippi files
+- [x] generate thumbnails from slippi files
+- [x] dual column layout
+- [ ] .... Move upload to left side (include instructions) and watch/ticker to right side
+- [ ] combine games from sets
 - [ ] /create-tournament
 - [ ] .... post request or something
 - [ ] .... /dashboard

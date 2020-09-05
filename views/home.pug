@@ -18,18 +18,15 @@ html
     div(class="page_wrapper")
       .row
         .column
-          .blue-column
-            label crt
-              img(id="crt_img", width="75%", src='/icon/dreamland.png')
+          img(id="crt_img", width="75%", src='/icon/dreamland.png')
         .column
-          .green-column
-            p test
-            h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
-            a(href='/api/history') view tournament database<br>
-            a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
-            <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
-            h4 Download links below (live update)
-            div#history_list
+          p test
+          h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
+          a(href='/api/history') view tournament database<br>
+          a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
+          <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
+          h4 Download links below (live update)
+          div#history_list
     //- <form method="post" action="http://kevbot.xyz/feed/me/secrets/upload" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>
 
     //- <form method="post" action="/upload-slp" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>
