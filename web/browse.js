@@ -22,6 +22,7 @@ $(document).ready(function() {
       return response.json();
     })
     .then(function(data) {
+      // https://www.ssbwiki.com/Category:Stage_icons_(SSBM) icons
       window.rows = data; // dirty hack
       //prettier-ignore
       drawMetaToScreen(data[0].metadata)

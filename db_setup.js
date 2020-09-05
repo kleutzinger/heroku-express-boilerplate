@@ -23,10 +23,10 @@ const tournament = `
 `;
 
 const upload_history = `
-  CREATE TABLE upload_history(
+  CREATE TABLE upload_history2(
   id         SERIAL  NOT NULL PRIMARY KEY,
   dl_url     TEXT    NOT NULL DEFAULT '',
-  temp_ul    BOOLEAN NOT NULL DEFAULT FALSE,
+  is_temp    BOOLEAN NOT NULL DEFAULT FALSE,
   frame_id   TEXT    NOT NULL DEFAULT '',  -- og_filename + framecount
   size       INT     NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -35,7 +35,7 @@ const upload_history = `
 const slippi_meta = `
   CREATE TABLE slippi_meta(
   id         SERIAL NOT NULL PRIMARY KEY,
-  frame_id   text    NOT NULL DEFAULT '',
+  file_id   text    NOT NULL DEFAULT '',
   metadata   jsonb   not null default '{}'::jsonb
   );
 `;
