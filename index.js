@@ -37,7 +37,9 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', (socket) => {
-  console.log('Client connected');
+  // console.log('Client connected');
   // socket.emit('history', {});
-  socket.on('disconnect', () => console.log('Client disconnected'));
+  socket.on('disconnect', () => {
+    //console.log('client disc')
+  });
 });

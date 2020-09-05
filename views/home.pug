@@ -7,20 +7,29 @@ html
     <script src="https://cdn.jsdelivr.net/npm/dropzone@5.7.2/dist/min/dropzone.min.js" integrity="sha256-VBW6wgQ/wqxKuy5M87Uhn5bvzBmeXgWVQiwAqPLUjfo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.7.2/dist/dropzone.min.css">
     <link rel="stylesheet" href="./style.css">
-    //- <link rel="stylesheet" href="/mvp.css">
-    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link rel="stylesheet" href="/mvp.css">
+    //- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
     script(type='text/javascript', src="/client-sockets.js")
+    script(type='text/javascript', src="/client-utils.js")
     script(type='text/javascript', src="/browse.js")
+    canvas#render(width="640", height="480", hidden)
     title= title
   body
-    label crt
-      canvas#crt
-    h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
-    a(href='/api/history') view tournament database<br>
-    a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
-    <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
-    h4 Download links below (live update)
-    div#history_list
+    div(class="page_wrapper")
+      .row
+        .column
+          .blue-column
+            label crt
+              img(id="crt_img", width="75%", src='/icon/dreamland.png')
+        .column
+          .green-column
+            p test
+            h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
+            a(href='/api/history') view tournament database<br>
+            a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
+            <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
+            h4 Download links below (live update)
+            div#history_list
     //- <form method="post" action="http://kevbot.xyz/feed/me/secrets/upload" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>
 
     //- <form method="post" action="/upload-slp" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>
