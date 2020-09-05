@@ -94,12 +94,7 @@ function drawWords(ctx, metadata) {
   ctx.font = "22pt 'monospace'";
   const startAt = _.get(metadata, 'slp_metadata.startAt');
   //prettier-ignore
-  const bottom_str = new Date(Date.parse(startAt)).toLocaleString("en-us", {  
-    weekday: "short", year: "numeric", month: "short",  
-    day: "2-digit", hour: "2-digit", minute: "2-digit",
-    dateStyle: "short", timeStyle: "short"
-
-  });
+  const bottom_str = new Date(Date.parse(startAt)).toLocaleString();
   ctx.fillText(bottom_str, 260, 450);
 
   const p0_code = _.get(metadata, 'slp_metadata.players[0].names.code');

@@ -52,72 +52,15 @@ async function new_processed_push(obj) {
   }
 }
 
-async function new_upload(dl_url, metadata = {}) {
-  try {
-    const filename = dl_url.split('/').pop();
-    const client = await pool.connect();
-    const text = 'INSERT INTO upload_history(dl_url, filename) VALUES($1, $2);';
-    const values = [ dl_url, filename ];
-    const resp = await client.query(text, values);
-    client.release();
-    return resp;
-  } catch (err) {
-    client.release();
-    console.log(err);
-  }
-}
-
-async function new_metadata(filename, metadata = {}, nice = {}) {
-  try {
-    filename = filename.split('/').pop();
-    const { niceData } = require('./web/client-utils.js');
-    const client = await pool.connect();
-    const text = 'INSERT INTO slippi_meta(filename, metadata) VALUES($1, $2);';
-    const values = [ filename, metadata ];
-    const resp = await client.query(text, values);
-    client.release();
-    return resp;
-  } catch (err) {
-    client.release();
-    console.log(err);
-  }
-}
-
-function update_tournament(client, id, key, val) {
-  const text = `UPDATE tournament
-        SET ${key} = '${val}'
-        WHERE id = ${id}
-        RETURNING *;`;
-  const values = [];
-
-  client
-    .query(text, values)
-    .then((res) => {
-      console.log(res.rows[0]);
-      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
-    })
-    .catch((e) => console.error(e.stack));
-}
-
-function list_tournaments(client, callback) {
-  client
-    .query('SELECT * from tournament order by created_at desc;')
-    .then((res) => {
-      // console.log(res.rows[0]);
-      callback(res.rows);
-    })
-    .catch((e) => console.error(e.stack));
-}
-
-async function get_upload_history() {
+async function get_upload_history(chronological = false) {
   try {
     const client = await pool.connect();
     // const text = `SELECT * from upload_history INNER JOIN slippi_meta on upload_history.filename=slippi_meta.filename ORDER BY created_at desc;`;
-    const text = `
-    SELECT *
-    from slp_history
-    ORDER BY start_at desc;
-`;
+    let text = `SELECT * from slp_history `;
+    if (chronological) {
+      text += 'ORDER BY start_at desc ';
+    }
+    text += ';';
     resp = await client.query(text);
     client.release();
     return resp;
@@ -134,8 +77,6 @@ app.get('/history', async (req, res) => {
 
 module.exports = {
   apiRouter          : app,
-  new_upload,
   new_processed_push,
-  get_upload_history,
-  new_metadata
+  get_upload_history
 };
