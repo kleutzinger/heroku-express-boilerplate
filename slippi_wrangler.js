@@ -11,8 +11,8 @@ function getSlippiData(path) {
   const slp_settings = game.getSettings();
   // Get metadata - start time, platform played on, etc
   const slp_metadata = game.getMetadata();
-
-  return { slp_settings, slp_metadata };
+  let metadata = { slp_settings, slp_metadata };
+  return metadata;
 }
 
 async function handle_slippi_file(path) {

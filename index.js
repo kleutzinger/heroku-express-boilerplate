@@ -4,10 +4,9 @@ const express = require('express');
 const socketIO = require('socket.io');
 const PORT = process.env.PORT || 5000;
 const app = express();
-
+const _ = require('lodash');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const _ = require('lodash');
 
 const path = require('path');
 var fs = require('fs');
