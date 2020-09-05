@@ -24,8 +24,9 @@ const tournament = `
 
 const upload_history = `
   CREATE TABLE upload_history(
-  id         SERIAL NOT NULL PRIMARY KEY,
+  id         SERIAL  NOT NULL PRIMARY KEY,
   dl_url     TEXT    NOT NULL DEFAULT '',
+  temp_ul    BOOLEAN NOT NULL DEFAULT FALSE,
   filename   text    NOT NULL DEFAULT '',
   size       INT     NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

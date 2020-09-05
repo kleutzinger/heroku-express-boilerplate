@@ -9,8 +9,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const _ = require('lodash');
 
-// api code
-
+const path = require('path');
 var fs = require('fs');
 app.use(bodyParser.json());
 
@@ -18,7 +17,7 @@ app.set('view engine', 'pug');
 // app.use(multer({ dest: './tmp' }).any());
 
 const { apiRouter } = require('./api.js');
-
+app.use(require('serve-favicon')(path.join('web', 'monocle.ico')));
 app.use(express.static('web'));
 app.use(morgan('tiny'));
 
