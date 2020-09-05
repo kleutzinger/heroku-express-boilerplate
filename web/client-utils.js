@@ -46,19 +46,23 @@ function drawIcons(ctx, imageURL, metadata, done_cb = null) {
   // function called once all images have loaded.
   function allLoaded() {
     let img;
-    // ctx.drawImage(images[0], 0, 0); // draw stage
-    // ctx.drawImage(images[1], 100, 30); // draw p1
-    // ctx.drawImage(images[2], 300, 0); // draw p2
+
     const icon_scale = 3;
-    img = images[0]; // stage
+    img = images[0]; // stage background
     //prettier-ignore
     ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 640, 480);
+
+    //background for text
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(0, 0, 640, 480 / 2.5);
+    ctx.fillStyle = '#ffffff';
+
     img = images[1]; // char0
     //prettier-ignore
-    ctx.drawImage(img, 0, 0, img.width, img.height, 200, 20, img.width * icon_scale, img.height * icon_scale);
+    ctx.drawImage(img, 0, 0, img.width, img.height, 170, 5, img.width * icon_scale, img.height * icon_scale);
     img = images[2]; // char1
     //prettier-ignore
-    ctx.drawImage(img, 0, 0, img.width, img.height, 380, 20, img.width * icon_scale, img.height * icon_scale);
+    ctx.drawImage(img, 0, 0, img.width, img.height, 170, 110, img.width * icon_scale, img.height * icon_scale);
 
     drawWords(ctx, metadata);
     if (done_cb) done_cb();
@@ -77,14 +81,30 @@ function drawIcons(ctx, imageURL, metadata, done_cb = null) {
   });
 }
 function drawWords(ctx, metadata) {
-  ctx.fillStyle = '#000000';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   ctx.fillRect(250, 400, 400, 100);
   // time text
   ctx.fillStyle = '#ffffff';
   ctx.font = "22pt 'monospace'";
   const startAt = _.get(metadata, 'slp_metadata.startAt');
-  const bottom_str = new Date(Date.parse(startAt)).toLocaleString();
+  //prettier-ignore
+  const bottom_str = new Date(Date.parse(startAt)).toLocaleString("en-us", {  
+    weekday: "short", year: "numeric", month: "short",  
+    day: "2-digit", hour: "2-digit", minute: "2-digit",
+    dateStyle: "short", timeStyle: "short"
+
+  });
   ctx.fillText(bottom_str, 260, 450);
+
+  const p0_code = _.get(metadata, 'slp_metadata.players[0].names.code');
+  ctx.fillText(p0_code, 10, 60);
+  const p0_tag = _.get(metadata, 'slp_metadata.players[0].names.netplay');
+  ctx.fillText(p0_tag, 270, 60);
+
+  const p1_code = _.get(metadata, 'slp_metadata.players[1].names.code');
+  ctx.fillText(p1_code, 10, 170);
+  const p1_tag = _.get(metadata, 'slp_metadata.players[1].names.netplay');
+  ctx.fillText(p1_tag, 270, 170);
 }
 
 function canvasToBody() {
