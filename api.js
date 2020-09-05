@@ -48,7 +48,9 @@ async function new_processed_push(obj) {
     return resp;
   } catch (err) {
     console.log(err);
-    client.release();
+    if (typeof client !== 'undefined') {
+      client.release();
+    }
   }
 }
 
@@ -66,7 +68,9 @@ async function get_upload_history(chronological = false) {
     return resp;
   } catch (err) {
     console.log(err);
-    client.release();
+    if (typeof client !== 'undefined') {
+      client.release();
+    }
   }
 }
 

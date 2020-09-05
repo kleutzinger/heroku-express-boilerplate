@@ -41,7 +41,6 @@ async function processIncomingFile(file, io) {
     const _path = file.path;
 
     if (!_path.endsWith('.slp')) {
-      console.log('not a slp');
       throw new Error('upload was not a .slp file, ignoring');
     }
     // get slippi metadata
@@ -71,7 +70,7 @@ async function processIncomingFile(file, io) {
       throw new Error('upload error: could not get a public dl_url');
     }
   } catch (err) {
-    console.log(err, err.message);
+    console.log(err.message);
   }
 }
 
