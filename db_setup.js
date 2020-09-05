@@ -27,7 +27,7 @@ const upload_history = `
   id         SERIAL  NOT NULL PRIMARY KEY,
   dl_url     TEXT    NOT NULL DEFAULT '',
   temp_ul    BOOLEAN NOT NULL DEFAULT FALSE,
-  filename   text    NOT NULL DEFAULT '',
+  frame_id   TEXT    NOT NULL DEFAULT '',  -- og_filename + framecount
   size       INT     NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -35,7 +35,7 @@ const upload_history = `
 const slippi_meta = `
   CREATE TABLE slippi_meta(
   id         SERIAL NOT NULL PRIMARY KEY,
-  filename   text    NOT NULL DEFAULT '',
+  frame_id   text    NOT NULL DEFAULT '',
   metadata   jsonb   not null default '{}'::jsonb
   );
 `;
