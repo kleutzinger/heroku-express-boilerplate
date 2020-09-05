@@ -6,20 +6,6 @@ const { default: SlippiGame } = require('@slippi/slippi-js');
 
 const app = require('express').Router();
 
-function new_tournament(client, name = 'none', url = 'https://smash.gg') {
-  const text =
-    'INSERT INTO tournament(name, bracket_url) VALUES($1, $2) RETURNING *';
-  const values = [ name, url ];
-
-  client
-    .query(text, values)
-    .then((res) => {
-      console.log(res.rows[0]);
-      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
-    })
-    .catch((e) => console.error(e.stack));
-}
-
 async function new_processed_push(obj) {
   // object is slp-parsed, stored online
   // now insert all into db
@@ -75,8 +61,12 @@ async function get_upload_history(chronological = false) {
 }
 
 app.get('/history', async (req, res) => {
-  const data = await get_upload_history();
-  res.json(data.rows);
+  try {
+    const data = await get_upload_history();
+    res.json(data.rows);
+  } catch (error) {
+    console.log(error, error.message);
+  }
 });
 
 module.exports = {
