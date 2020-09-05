@@ -1,28 +1,3 @@
-const create_str = `
-   CREATE TABLE tournament(
-   id SERIAL NOT NULL PRIMARY KEY,
-   name           TEXT    NOT NULL DEFAULT '',
-   bracket_url    TEXT    NOT NULL DEFAULT '',
-   slp_filecount INT NOT NULL DEFAULT 0,
-   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-`;
-
-const upload_history = `
-   CREATE TABLE upload_history(
-   id         SERIAL NOT NULL PRIMARY KEY,
-   dl_url     TEXT    NOT NULL DEFAULT '',
-   filename   text    NOT NULL DEFAULT '',
-   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-`;
-const slippi_meta = `
-  CREATE TABLE slippi_meta(
-  id         SERIAL NOT NULL PRIMARY KEY,
-  filename   text    NOT NULL DEFAULT '',
-  metadata   jsonb   not null default '{}'::jsonb
-  );
-`;
 const dotenv = require('dotenv');
 dotenv.config();
 const pool = require('./db_setup.js');
