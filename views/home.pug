@@ -22,6 +22,7 @@ html
     div(class="page_wrapper")
       .row
         .column#left_column
+          h1 Click stage icons to download
           .tabulator#tabulator
           h1 By Kevbot
           img(id="crt_img", width="75%", src='/thumbnail/example2.png')
@@ -29,7 +30,7 @@ html
             <div class="timeago" datetime="2020-01-26 23:00:00"></div>
         .column
           a(href='/api/history') view games database
-          h1 Upload / Download
+          h1 Upload
           h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
           <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
           h4 Download links below (live update)
