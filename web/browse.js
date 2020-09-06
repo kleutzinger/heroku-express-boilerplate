@@ -27,9 +27,10 @@ $(document).ready(function() {
     .then(function(response) {
       return response.json();
     })
-    .then((d) => {
-      renderRows(d);
-      const global_sets = partitionRowsBySet(d);
+    .then((rows) => {
+      // renderRows(d);
+      const global_sets = partitionRowsBySet(rows);
+      populateTable(global_sets);
       console.log(global_sets);
     });
 });
@@ -40,8 +41,7 @@ function renderRows(rows) {
   //prettier-ignore
   timeago.cancel();
   // drawMetaToScreen(rows[0].metadata);
-  const sets = partitionRowsBySet(rows);
-  populateTable(sets);
+
   $('#history_list').empty();
   rows.map((history_item, idx) => {
     const p1tag = _.get(

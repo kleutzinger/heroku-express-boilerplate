@@ -22,7 +22,7 @@ html
     div(class="page_wrapper")
       .row
         .column#left_column
-          h2 ~Click stage icons to download .slp~
+          h2 ~Click stage icons to download .slp~ (launch with slippi desktop app)
           .tabulator#tabulator
           h1 By Kevbot
           img(id="crt_img", width="40%")
@@ -31,9 +31,9 @@ html
         .column
           a(href='/api/history') view games database
           h1 Upload
-          h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
+          h4 Upload your .slp files here,<br>They will remain on this page for everyone to see and download
           <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
-          h4 Download links below (live update)
+          h4 Live Uploads (Links will appear here as they are uploaded by others, refresh to insert into table)
           div#history_list
     .footer
       a(href='/api/history') view games database

@@ -1,9 +1,14 @@
 function populateTable(sets) {
-  const sets_annotated = addDataToSets(sets.reverse());
+  addDataToSets(sets.reverse());
   var table = new Tabulator('#tabulator', {
-    data    : sets, //assign data to table
+    data        : sets, //assign data to table
     // prettier-ignore
-    columns: genColumns()
+    columns: genColumns(),
+    // layout      : 'fitColumns',
+    initialSort : [
+      //set the initial sort order of the data
+      { column: 'P1', dir: 'desc' }
+    ]
   });
 }
 

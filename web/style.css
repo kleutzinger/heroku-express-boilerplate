@@ -58,6 +58,7 @@ div.ts-container {
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
+  margin: 0 10px;
 }
 
 .blue-column {
