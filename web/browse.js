@@ -19,6 +19,8 @@ $(document).ready(function() {
     $('#left_column').prepend(
       `<a href="https://spectate-melee-kb.herokuapp.com/"><h1>~go2live~</h1></a>`
     );
+  } else {
+    // $(document.body).css('background-color', '#abd');
   }
   const time_nodes = document.querySelectorAll('.timeago');
   timeago.render(time_nodes, 'en_US', { minInterval: 3 });
