@@ -12,6 +12,8 @@ function niceData(meta) {
 
   let p0_code = _.get(meta, 'slp_metadata.players[0].names.code');
   let p1_code = _.get(meta, 'slp_metadata.players[1].names.code');
+  let p0_tag = _.get(meta, 'slp_metadata.players[0].names.netplay');
+  let p1_tag = _.get(meta, 'slp_metadata.players[1].names.netplay');
   let p0_char = _.get(meta, 'slp_settings.players[0].characterId');
   let p1_char = _.get(meta, 'slp_settings.players[1].characterId');
   let p0_color = _.get(meta, 'slp_settings.players[0].characterColor');
@@ -23,7 +25,7 @@ function niceData(meta) {
   let settings_tag = [last_frame, p0_code, p1_code, stage_id, p0_char, p1_char, p0_color, p1_color]
     .join('_');
   //prettier-ignore
-  let data_pool = {stage_id,p0_code,p1_code,p0_char,p1_char,p0_color,p1_color,last_frame,start_at,settings_tag};
+  let data_pool = {stage_id,p0_code,p1_code,p0_tag,p1_tag,p0_char,p1_char,p0_color,p1_color,last_frame,start_at,settings_tag};
   return data_pool;
 }
 

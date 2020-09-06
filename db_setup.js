@@ -57,3 +57,5 @@ const slp_history = `
 
 // select SUBSTRING(filename, length(filename)-23) from upload_history;
 // Nn6pFd2-Game_20200810T180947.slp -> Game_20200810T180947.slp
+
+// SELECT ('2012-08-04 00:19:35'::TIMESTAMP - '2012-08-04 00:19:33'::TIMESTAMP) between '-1s'::interval and '1s'::interval;

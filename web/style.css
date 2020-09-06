@@ -12,6 +12,10 @@ img.stage_thumb {
   width: 150px;
 }
 
+.timeago {
+  display: inline-block;
+}
+
 button.red {
   /* width: 10%; */
   color: white;

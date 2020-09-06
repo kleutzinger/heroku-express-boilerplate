@@ -62,7 +62,7 @@ async function get_upload_history(chronological = false) {
 
 app.get('/history', async (req, res) => {
   try {
-    const data = await get_upload_history();
+    const data = await get_upload_history((chronological = true));
     res.json(data.rows);
   } catch (error) {
     console.log(error, error.message);
