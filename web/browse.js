@@ -54,7 +54,7 @@ function renderRows(rows) {
     );
     const when = _.get(history_item, 'metadata.slp_metadata.startAt');
     const { dl_url } = history_item;
-    const button = `<a onClick="previewIdx(${idx})">preview</a>`;
+    const button = `<a onClick="previewIdx(${idx})">generate thumbnail</a>`;
     const time_ticker = `<p class="timeago" datetime="${when}"></p>`;
     // prettier-ignore
     const display_info = [ '\t', p1tag, 'vs', p2tag, '@', time_ticker].join(' ');

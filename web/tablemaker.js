@@ -50,7 +50,6 @@ function addDataToSets(sets) {
     set.P1 = game1.nice.p0_tag;
     set.P2 = game1.nice.p1_tag;
     set.CHAR = game2chars(game1);
-    // set.G1 = { icon: game2icon(game1), dl_url: game1.dl_url };
     let game_num = 1;
     for (const game of set.games) {
       set['G' + game_num] = { icon: game2stg(game), dl_url: game.dl_url };
