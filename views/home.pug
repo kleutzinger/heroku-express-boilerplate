@@ -17,12 +17,13 @@ html
   body
     div(class="page_wrapper")
       .row
-        .column
-          <div class="timeago" datetime="2020-09-05 16:23:00"></div>
-          h1 Download
+        .column#left_column
+          h1 By Kevbot
           img(id="crt_img", width="75%", src='/thumbnail/example2.png')
+          p Zain won Genesis 7:
+            <div class="timeago" datetime="2020-01-26 23:00:00"></div>
         .column
-          h1 Upload
+          h1 Upload / Download
           h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
           a(href='/api/history') view tournament database<br>
           a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)

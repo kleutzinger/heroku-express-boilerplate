@@ -69,7 +69,7 @@ async function processIncomingFile(file, io) {
       };
       const resp = await new_processed_push(output_obj);
       if (resp) {
-        io.sockets.emit('new_upload', output_obj);
+        io.sockets.emit('new_upload', resp.rows[0]);
         return resp;
       }
     } else {
