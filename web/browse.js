@@ -20,6 +20,8 @@ $(document).ready(function() {
       `<a href="https://spectate-melee-kb.herokuapp.com/"><h1>~go2live~</h1></a>`
     );
   }
+  const time_nodes = document.querySelectorAll('.timeago');
+  timeago.render(time_nodes, 'en_US', { minInterval: 3 });
   init_socket_io();
   fetch('/api/history', {
     method : 'get'
@@ -61,9 +63,7 @@ function renderRows(rows) {
     $(
       `<div><a href="${dl_url}">download</a><span>${display_info}</span>${button}</div>`
     ).appendTo('#history_list');
-    const nodes = document.querySelectorAll('.timeago');
     // use render method to render nodes in real time
-    timeago.render(nodes, 'en_US', { minInterval: 3 });
   });
 }
 

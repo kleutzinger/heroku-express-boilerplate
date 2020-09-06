@@ -2,6 +2,7 @@
   float: bottom;
   position: absolute;
   bottom: 2em;
+  margin: 5px 5px;
 }
 
 li p {
