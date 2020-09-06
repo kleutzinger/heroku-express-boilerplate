@@ -10,30 +10,31 @@ async function new_processed_push(obj) {
   // object is slp-parsed, stored online
   // now insert all into db
   try {
-    let { metadata, nice, is_temp, dl_url, filename, filesize } = obj;
+    // prettier-ignore
+    let { metadata, nice, uniq_tag, is_temp, dl_url, hosted_filename, filesize } = obj;
     const start_at = Date.parse(nice.start_at);
     const client = await pool.connect();
     const text = `
     INSERT INTO slp_history
-      (filename, dl_url, is_temp, settings_tag, filesize, metadata, start_at) 
+      (hosted_filename, dl_url, is_temp, uniq_tag, filesize, metadata, start_at) 
       VALUES($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `;
     const values = [
-      filename,
+      hosted_filename,
       dl_url,
       is_temp,
-      nice.settings_tag,
+      uniq_tag,
       filesize,
       metadata,
       nice.start_at
     ];
     const resp = await client.query(text, values);
     client.release();
-    console.log(resp);
+    // console.log(resp);
     return resp;
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     if (typeof client !== 'undefined') {
       client.release();
     }
@@ -43,7 +44,6 @@ async function new_processed_push(obj) {
 async function get_upload_history(chronological = false) {
   try {
     const client = await pool.connect();
-    // const text = `SELECT * from upload_history INNER JOIN slippi_meta on upload_history.filename=slippi_meta.filename ORDER BY created_at desc;`;
     let text = `SELECT * from slp_history `;
     if (chronological) {
       text += 'ORDER BY start_at desc ';
@@ -60,17 +60,65 @@ async function get_upload_history(chronological = false) {
   }
 }
 
+async function run_text_values(text, values) {
+  try {
+    const client = await pool.connect();
+    resp = await client.query(text, values);
+    client.release();
+    return resp;
+  } catch (err) {
+    console.log(err);
+    if (typeof client !== 'undefined') {
+      client.release();
+    }
+  }
+}
+(async () => {
+  return;
+  const between_times_text = ` 
+-- goal: get all timestamps between time0 and time1 ?
+-- where $[minus_time, plus_time]
+
+
+SELECT 
+  CASE WHEN EXISTS 
+    (  SELECT id, start_at, settings_tag from slp_history where ( 
+  start_at >= $1 AND start_at <= $2) 
+)
+  THEN insert into upload_history  
+  ELSE 0
+  END ;
+`;
+  const data = await get_upload_history((chronological = true));
+  const game = data.rows[0];
+  const start_at = Date.parse(game.start_at);
+
+  const values = [
+    new Date(start_at - 5 * 1000),
+    new Date(start_at + 5 * 1000)
+  ];
+
+  console.log(values);
+  // process.exit();
+  var resp = await run_text_values(between_times_text, values);
+  console.log(resp.rows);
+})().catch((e) => {
+  console.log(e);
+  // Deal with the fact the chain failed
+});
+
 app.get('/history', async (req, res) => {
   try {
     const data = await get_upload_history((chronological = true));
     res.json(data.rows);
   } catch (error) {
-    console.log(error, error.message);
+    console.log('error getting /history', error.message);
   }
 });
 
 module.exports = {
   apiRouter          : app,
   new_processed_push,
-  get_upload_history
+  get_upload_history,
+  run_text_values
 };

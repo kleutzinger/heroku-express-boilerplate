@@ -14,7 +14,7 @@ const fetch = require('node-fetch');
 const _ = require('lodash');
 const FormData = require('form-data');
 const { new_processed_push } = require('./api.js');
-const { default: SlippiGame } = require('@slippi/slippi-js');
+const { default: SlippiGame, ConsoleConnection } = require('@slippi/slippi-js');
 
 if (!existsSync(TMPDIR)) {
   mkdirSync(TMPDIR, { recursive: true });
@@ -55,17 +55,23 @@ async function processIncomingFile(file, io) {
     const { dl_url } = up_json; // the download link to public file
     if (dl_url) {
       console.log(dl_url);
+      const nice = niceData(processed_metadata);
+      const uniq_tag = nice.settings_tag + nice.start_at;
       let output_obj = {
-        metadata : processed_metadata,
-        nice     : niceData(processed_metadata),
+        metadata        : processed_metadata,
+        nice,
         is_temp,
+        uniq_tag,
         dl_url,
-        filename : file.filename,
+        hosted_filename : file.path.split('/').pop(),
         // file,
-        filesize : file.size
+        filesize        : file.size
       };
-      io.sockets.emit('new_upload', output_obj);
-      new_processed_push(output_obj);
+      const resp = await new_processed_push(output_obj);
+      if (resp) {
+        io.sockets.emit('new_upload', output_obj);
+        return resp;
+      }
     } else {
       throw new Error('upload error: could not get a public dl_url');
     }
@@ -92,13 +98,16 @@ var returnRouter = function(io) {
   app.post('/', upload.any(), async function(req, res) {
     try {
       let files = req.files || [ req.file ];
-      _.map(files, (file) => {
-        processIncomingFile(file, io);
-      });
-      console.log('Got ' + files.length + ' files');
-      res.sendStatus(200);
+
+      const resp = await processIncomingFile(files[0], io);
+      // console.log('Got ' + files.length + ' files');
+      if (!resp) {
+        throw new Error('bad upload. duplicate?');
+      } else {
+        res.sendStatus(200);
+      }
     } catch (err) {
-      console.log('file error, or no file?');
+      // console.log('file error, or no file?');
       console.log(err.message);
       res.sendStatus(400);
     }
