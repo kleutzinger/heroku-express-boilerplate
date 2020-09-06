@@ -27,7 +27,10 @@ $(document).ready(function() {
     .then(function(response) {
       return response.json();
     })
-    .then((d) => renderRows(d));
+    .then((d) => {
+      renderRows(d);
+      partitionRowsBySet(d);
+    });
 });
 
 function renderRows(rows) {
@@ -62,57 +65,3 @@ function renderRows(rows) {
 }
 
 // let data_pool = {stage_id,p0_code,p1_code,p0_char,p1_char,p0_color,p1_color,last_frame,start_at,settings_tag};
-
-function partitionRowsBySet(rows) {
-  // assumes rows are sorted by start_ats
-  // returns [[g0,g1], [g2,g3,g4], ... ] by set
-  let row_copy = _.cloneDeep(rows);
-  // allow player 1 and player 2 to switch (on reconnect?)
-  const codes_str = (g) => {
-    return [ g.nice.p0_code, g.nice.p1_code ].sort().join('');
-  };
-  const timeDelta = (t0, t1) => {
-    return Math.abs(Date.parse(t0) - Date.parse(t1));
-  };
-  row_copy = row_copy.map((game) => {
-    game.nice = niceData(game.metadata);
-    game.codes_str = codes_str(game);
-    console.log(codes_str(game));
-    return game;
-  });
-  let partitions = [];
-  let cur_set = [];
-  _.forEachRight(row_copy, (game, idx) => {
-    // go oldest to newest
-    if (_.isEmpty(cur_set)) {
-      cur_set.push(game);
-      return true; // continue
-    }
-    const _last = _.last(cur_set); // newest game in the set
-    if (_last.codes_str !== game.codes_str) {
-      // different players, make new set
-      partitions.push(cur_set);
-      cur_set = [ game ];
-      return true; // continue
-    }
-    const time_limit = 1000 * 60 * 60; // 1 hr
-    const time_diff = timeDelta(_last.start_at, game.start_at);
-    if (time_diff > time_limit) {
-      // games more than time_limit apart
-      partitions.push(cur_set);
-      cur_set = [ game ];
-      return true; // continue
-    }
-
-    if (time_diff < 1000 * 5) {
-      //prettier-ignore
-      console.log('same game? (same players, less than 5 sec apart)', _last.id, game.id);
-    }
-    // games are probably in the same set? (same players, similar time)
-    cur_set.push(game);
-  });
-  if (!_.isEmpty(cur_set)) {
-    partitions.push(cur_set);
-  }
-  return partitions;
-}

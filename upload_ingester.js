@@ -84,6 +84,8 @@ function getSlippiData(path) {
   const game = new SlippiGame(path);
   const slp_settings = game.getSettings();
   const slp_metadata = game.getMetadata();
+  // const slp_stats = game.getStats();
+  // const slp_frames = game.getFrames();
   let metadata = { slp_settings, slp_metadata };
   return metadata;
 }
