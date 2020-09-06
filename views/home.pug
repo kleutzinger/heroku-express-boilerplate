@@ -5,12 +5,16 @@ html
     <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js" integrity="sha256-sTurDi2etLN9CpnUIoCC9y5iynb2qr/uo6QJqzoO7mA=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js" integrity="sha256-ur/YlHMU96MxHEsy3fHGszZHas7NzH4RQlD4tDVvFhw=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/dropzone@5.7.2/dist/min/dropzone.min.js" integrity="sha256-VBW6wgQ/wqxKuy5M87Uhn5bvzBmeXgWVQiwAqPLUjfo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.js" integrity="sha256-QTriwEK1XTUJdKp3So7tMDUvZSTLOPpUv8F/J+UwJ8M=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@4.7.2/dist/js/tabulator.min.js" integrity="sha256-MXVVvLTA87/De5G7VXpMOAXUHXEaaj9BroBQTz4cgls=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@4.7.2/dist/css/tabulator.min.css" integrity="sha256-ZpikKUhrU7ZxfqKh8PT2V4w9w1sHDokJa/czD+netyM=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.7.2/dist/dropzone.min.css">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="/mvp.css">
     //- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
     script(type='text/javascript', src="/client-sockets.js")
     script(type='text/javascript', src="/client-utils.js")
+    script(type='text/javascript', src="/tablemaker.js")
     script(type='text/javascript', src="/browse.js")
     canvas#render(width="640", height="480", hidden)
     title= title
@@ -18,19 +22,23 @@ html
     div(class="page_wrapper")
       .row
         .column#left_column
+          .tabulator#tabulator
           h1 By Kevbot
           img(id="crt_img", width="75%", src='/thumbnail/example2.png')
           p Zain won Genesis 7:
             <div class="timeago" datetime="2020-01-26 23:00:00"></div>
         .column
+          a(href='/api/history') view games database
           h1 Upload / Download
           h4 Upload your .slp files here,<br>They will remain on this page for everyone to see 
-          a(href='/api/history') view tournament database<br>
-          a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
           <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
           h4 Download links below (live update)
           div#history_list
-
+    .footer
+      a(href='/api/history') view games database
+      br
+      a(href='https://github.com/kleutzinger/spectate-melee-kb') source code (by Kevbot)
+          
     //- <form method="post" action="http://kevbot.xyz/feed/me/secrets/upload" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>
 
     //- <form method="post" action="/upload-slp" class="dropzone" id="dropzone-example"><div class="fallback"><input name="file" type="file" multiple /></div></form>

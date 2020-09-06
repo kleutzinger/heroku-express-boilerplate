@@ -339,12 +339,14 @@
     "2": {
       "dir_name": "fountain",
       "stage_name": "Fountain of Dreams",
-      "icon": "fountain.png"
+      "icon": "fountain.png",
+      "icon_small": "fountain_small.png"
     },
     "3": {
       "dir_name": "stadium",
       "stage_name": "Pokémon Stadium",
-      "icon": "stadium.png"
+      "icon": "stadium.png",
+      "icon_small": "stadium_small.png"
     },
     "4": {
       "stage_name": "PRINCESS_PEACHS_CASTLE"
@@ -361,7 +363,8 @@
     "8": {
       "dir_name": "yoshis",
       "stage_name": "Yoshi's Story",
-      "icon": "yoshis.png"
+      "icon": "yoshis.png",
+      "icon_small": "yoshis_small.png"
     },
     "9": {
       "stage_name": "ONETT"
@@ -420,7 +423,8 @@
     "28": {
       "dir_name": "dreamland",
       "stage_name": "Dream Land",
-      "icon": "dreamland.png"
+      "icon": "dreamland.png",
+      "icon_small": "dreamland_small.png"
     },
     "29": {
       "stage_name": "YOSHIS_ISLAND_N64"
@@ -431,12 +435,14 @@
     "31": {
       "dir_name": "battlefield",
       "stage_name": "Battlefield",
-      "icon": "battlefield.png"
+      "icon": "battlefield.png",
+      "icon_small": "battlefield_small.png"
     },
     "32": {
       "dir_name": "final",
       "stage_name": "Final Destination",
-      "icon": "final.png"
+      "icon": "final.png",
+      "icon_small": "final_small.png"
     }
   }
 }

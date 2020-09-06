@@ -12,6 +12,18 @@ img.stage_thumb {
   width: 150px;
 }
 
+.infoImage {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.inline_img {
+  display: inline;
+  margin: 0 0.125em;
+  padding: 0;
+  vertical-align: baseline;
+}
 .timeago {
   display: inline-block;
 }

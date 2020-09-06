@@ -29,7 +29,8 @@ $(document).ready(function() {
     })
     .then((d) => {
       renderRows(d);
-      partitionRowsBySet(d);
+      const global_sets = partitionRowsBySet(d);
+      console.log(global_sets);
     });
 });
 
@@ -39,6 +40,8 @@ function renderRows(rows) {
   //prettier-ignore
   timeago.cancel();
   // drawMetaToScreen(rows[0].metadata);
+  const sets = partitionRowsBySet(rows);
+  populateTable(sets);
   $('#history_list').empty();
   rows.map((history_item, idx) => {
     const p1tag = _.get(
