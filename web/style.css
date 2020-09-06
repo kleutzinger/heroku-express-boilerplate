@@ -35,6 +35,15 @@ button.red {
   background-color: #800;
   border-color: #800;
 }
+
+#dropzone {
+  background: rgb(33, 186, 69);
+  background: radial-gradient(
+    circle,
+    rgba(33, 186, 69, 1) 0%,
+    rgba(46, 80, 50, 1) 100%
+  );
+}
 div.ts-container {
   position: relative;
   display: flex;

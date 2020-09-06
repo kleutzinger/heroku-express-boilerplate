@@ -7,7 +7,7 @@ function populateTable(sets) {
     // layout      : 'fitColumns',
     initialSort : [
       //set the initial sort order of the data
-      { column: 'P1', dir: 'desc' }
+      // { column: 'start_atp', dir: 'desc' }
     ]
   });
 }
@@ -31,7 +31,7 @@ function genColumns() {
         invalidPlaceholder : '(invalid date)'
       }
     },
-    { title: 'P1', field: 'P1' },
+    { title: 'P1', field: 'P1', formatter: 'html' },
     { title: 'P2', field: 'P2', formatter: 'html' },
     { title: 'CHAR', field: 'CHAR', formatter: 'html' },
     { title: 'G1', field: 'G1', hozAlign: 'center', formatter: gm_fmt },
@@ -50,7 +50,7 @@ function gm_fmt(cell, formatterParams, onRendered) {
 }
 
 function addDataToSets(sets) {
-  sets = _.map(sets, (set) => {
+  return _.map(sets, (set) => {
     const game1 = set.games[0];
     set.P1 = game1.nice.p0_tag;
     set.P2 = game1.nice.p1_tag;
@@ -60,7 +60,6 @@ function addDataToSets(sets) {
       set['G' + game_num] = { icon: game2stg(game), dl_url: game.dl_url };
       game_num += 1;
     }
-
     return set;
   });
 }
