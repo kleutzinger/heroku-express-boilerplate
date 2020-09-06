@@ -152,7 +152,7 @@ function partitionRowsBySet(rows) {
   const timeDelta = (t0, t1) => {
     return Math.abs(Date.parse(t0) - Date.parse(t1));
   };
-  const dp = (t) => Date.parse(e);
+  const dp = (t) => Date.parse(t);
   row_copy = row_copy.map((game) => {
     game.nice = niceData(game.metadata);
     game.codes_sorted = codes_sorted(game);
@@ -167,7 +167,8 @@ function partitionRowsBySet(rows) {
     }
     gameArr = games_by_codes[codes].chron;
     gameArr = insertSortedBy(gameArr, game, (e) => {
-      dp(e.start_at);
+      console.log(e);
+      return dp(e.start_at);
     });
   }
   console.log(games_by_codes);
