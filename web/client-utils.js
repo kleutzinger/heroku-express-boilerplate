@@ -163,6 +163,8 @@ function partitionRowsBySet(rows) {
     return game;
   });
   let global_games_by_codes = {};
+  // {kb#umar: [g0,g1], bobo#smilo: [g0, g1], ...}
+  // sort all game chronologically per tag
   for (const game of row_copy) {
     const codes = game.codes_sorted;
     if (!_.has(global_games_by_codes, codes)) {
@@ -174,7 +176,7 @@ function partitionRowsBySet(rows) {
     });
   }
   const split_by_times = (gameArr) => {
-    // splits array up by
+    // splits chronological games by time
     let partitions = [];
     let cur_set = [];
     _.forEach(gameArr, (game, idx) => {
@@ -184,7 +186,7 @@ function partitionRowsBySet(rows) {
         return true; // continue
       }
       const _last = _.last(cur_set); // newest game in the set
-      const time_limit = 1000 * 60 * 20; // 20 min between games
+      const time_limit = 1000 * 60 * 20; // 20 min between games. what about losers to winners finals
       const time_diff = timeDelta(_last.start_at, game.start_at);
       if (time_diff > time_limit) {
         partitions.push(cur_set);
@@ -216,11 +218,7 @@ function partitionRowsBySet(rows) {
       let game1 = set_part[0];
       let set = {
         start_atp : game1.nice.start_atp,
-        games     : set_part,
-        html0     : "<a href='#'>ay</a>",
-        html1     :
-          "<img class='inline_image' src='/icon/dreamland.png'></img>",
-        html2     : "<a href='#'>ay</a>"
+        games     : set_part
       };
       insertSortedBy(global_sets, set, (e) => e.start_atp);
     });

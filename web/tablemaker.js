@@ -1,13 +1,17 @@
+function redraw_table(sets) {
+  populateTable(sets);
+}
+
 function populateTable(sets) {
-  addDataToSets(sets.reverse());
+  addDataToSets(sets);
   var table = new Tabulator('#tabulator', {
-    data        : sets, //assign data to table
+    data        : _.shuffle(sets), //assign data to table
     // prettier-ignore
     columns: genColumns(),
     // layout      : 'fitColumns',
     initialSort : [
       //set the initial sort order of the data
-      // { column: 'start_atp', dir: 'desc' }
+      { column: 'start_atp', dir: 'desc' }
     ]
   });
 }
@@ -17,12 +21,12 @@ function genColumns() {
     {
       title     : 'Time',
       field     : 'start_atp',
-      sorter    : 'date',
+      sorter    : 'datetime',
       formatter : 'datetime'
     },
     {
       title           : 'Played',
-      field           : 'start_atp',
+      field           : 'start_at2',
       formatter       : 'datetimediff',
       formatterParams : {
         // inputFormat        : 'YYYY-MM-DD',
@@ -52,6 +56,7 @@ function gm_fmt(cell, formatterParams, onRendered) {
 function addDataToSets(sets) {
   return _.map(sets, (set) => {
     const game1 = set.games[0];
+    set.start_at2 = moment(game1.start_at);
     set.P1 = game1.nice.p0_tag;
     set.P2 = game1.nice.p1_tag;
     set.CHAR = game2chars(game1);

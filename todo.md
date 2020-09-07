@@ -13,8 +13,8 @@ curl -i -F 'file=@hi.txt' https://tmp.ninja/api.php?d=upload
 ```
 - [x] generate thumbnails from slippi files
 - [x] dual column layout
-- [ ] .... Move upload to left side (include instructions) and watch/ticker to right side
-- [ ] combine games from sets
+- [x] .... Move upload to left side (include instructions) and watch/ticker to right side
+- [x] combine games from sets
 - [ ] /create-tournament
 - [ ] .... post request or something
 - [ ] .... /dashboard

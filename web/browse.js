@@ -34,6 +34,7 @@ $(document).ready(function() {
     .then((rows) => {
       // renderRows(d);
       const global_sets = partitionRowsBySet(rows);
+      window.global_sets = global_sets;
       populateTable(global_sets);
       console.log(global_sets);
     });
