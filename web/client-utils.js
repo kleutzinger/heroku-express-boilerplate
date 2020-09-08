@@ -197,7 +197,8 @@ function partitionRowsBySet(rows) {
         //prettier-ignore
         console.log('same game? (same players,  less than 5 sec apart)\non:\n', _last.id, ',', game.id);
       }
-      if (cur_set.length >= 5) {
+      const maximum_games_per_set = 5;
+      if (cur_set.length >= maximum_games_per_set) {
         // only allow 5 games per set
         partitions.push(cur_set);
         cur_set = [ game ];

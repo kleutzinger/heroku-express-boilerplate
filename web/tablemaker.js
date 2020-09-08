@@ -5,11 +5,12 @@ function redraw_table(sets) {
 function populateTable(sets) {
   addDataToSets(sets);
   var table = new Tabulator('#tabulator', {
-    data        : _.shuffle(sets), //assign data to table
+    data          : _.shuffle(sets), //assign data to table
     // prettier-ignore
     columns: genColumns(),
+    cellVertAlign : 'middle',
     // layout      : 'fitColumns',
-    initialSort : [
+    initialSort   : [
       //set the initial sort order of the data
       { column: 'start_atp', dir: 'desc' }
     ]
@@ -19,10 +20,16 @@ function populateTable(sets) {
 function genColumns() {
   return [
     {
-      title     : 'Time',
-      field     : 'start_atp',
-      sorter    : 'datetime',
-      formatter : 'datetime'
+      title           : 'Time',
+      field           : 'start_atp',
+      sorter          : 'datetime',
+      formatter       : 'datetime',
+      formatterParams : {
+        // inputFormat        : 'YYYY-MM-DD HH:ii',
+        outputFormat       : "MMM Do, 'YYYY",
+        invalidPlaceholder : '(invalid date)'
+        // timezone           : 'America/Los_Angeles'
+      }
     },
     {
       title           : 'Played',
@@ -49,7 +56,9 @@ function genColumns() {
 function gm_fmt(cell, formatterParams, onRendered) {
   const val = cell.getValue();
   if (!val) return;
-  const ret = `<a href="${val.dl_url}"><img class='infoImage' src="${val.icon}"></img></a>`;
+  const ret = `
+  <a href="${val.dl_url}"><img class='infoImage' src="${val.icon}"></img></a>
+  `;
   return ret;
 }
 
