@@ -25,19 +25,24 @@ $(document).ready(function() {
   const time_nodes = document.querySelectorAll('.timeago');
   timeago.render(time_nodes, 'en_US', { minInterval: 3 });
   init_socket_io();
-  fetch('/api/history', {
-    method : 'get'
-  })
-    .then(function(response) {
-      return response.json();
-    })
-    .then((rows) => {
-      // renderRows(d);
-      const global_sets = partitionRowsBySet(rows);
-      window.global_sets = global_sets;
-      populateTable(global_sets);
-      console.log(global_sets);
-    });
+  const rows = upload_history; // supplied by pug (serverside)
+  const global_sets = partitionRowsBySet(rows);
+  window.global_sets = global_sets;
+  populateTable(global_sets);
+  console.log(global_sets);
+  // fetch('/api/history', {
+  //   method : 'get'
+  // })
+  //   .then(function(response) {
+  //     return response.json();
+  //   })
+  //   .then((rows) => {
+  //     // renderRows(d);
+  //     const global_sets = partitionRowsBySet(rows);
+  //     window.global_sets = global_sets;
+  //     populateTable(global_sets);
+  //     console.log(global_sets);
+  //   });
 });
 
 function renderRows(rows) {

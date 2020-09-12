@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 app.set('view engine', 'pug');
 // app.use(multer({ dest: './tmp' }).any());
 
-const { apiRouter } = require('./api.js');
 app.use(require('serve-favicon')(path.join('web', 'monocle.ico')));
 app.use(express.static('web'));
 app.use(morgan('tiny'));
@@ -29,10 +28,13 @@ const io = socketIO(server);
 
 const uploadRouter = require('./upload_ingester.js')(io);
 app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
+
+const { apiRouter, get_upload_history } = require('./api.js');
 app.use('/api', apiRouter);
 
-app.get('/', function(req, res) {
-  res.render('home', {});
+app.get('/', async function(req, res) {
+  const upload_history = await get_upload_history();
+  res.render('home', { upload_history: JSON.stringify(upload_history.rows) });
 });
 
 io.on('connection', (socket) => {

@@ -26,7 +26,7 @@ function genColumns() {
       formatter       : 'datetime',
       formatterParams : {
         // inputFormat        : 'YYYY-MM-DD HH:ii',
-        outputFormat       : "MMM Do, 'YYYY",
+        outputFormat       : 'MMM Do, YYYY',
         invalidPlaceholder : '(invalid date)'
         // timezone           : 'America/Los_Angeles'
       }
