@@ -32,9 +32,14 @@ app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to
 const { apiRouter, get_upload_history } = require('./api.js');
 app.use('/api', apiRouter);
 
-app.get('/', async function(req, res) {
-  const upload_history = await get_upload_history();
-  res.render('home', { upload_history: JSON.stringify(upload_history.rows) });
+app.get('/', async function(req, res, next) {
+  try {
+    const upload_history = await get_upload_history();
+    const rows = upload_history ? upload_history.rows : [];
+    res.render('home', { upload_history: JSON.stringify(rows) });
+  } catch (error) {
+    next(error);
+  }
 });
 
 io.on('connection', (socket) => {
