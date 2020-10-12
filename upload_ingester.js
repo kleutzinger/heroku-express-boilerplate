@@ -11,6 +11,7 @@ const SLPDIR = 'slp';
 const { existsSync, mkdirSync } = require('fs');
 const fs = require('fs');
 const path = require('path');
+const moveFile = require('move-file');
 const fetch = require('node-fetch');
 const _ = require('lodash');
 const FormData = require('form-data');
@@ -52,13 +53,7 @@ async function processIncomingFile(file, io) {
     //   body   : genFormData(_path)
     // });
     const hosted_filename = file.path.split('/').pop();
-    await fs.rename(
-      _path,
-      path.join(__dirname, SLPDIR, hosted_filename),
-      (err) => {
-        if (err) throw err;
-      }
-    );
+    await moveFile(_path, path.join(__dirname, SLPDIR, hosted_filename));
     let is_temp = false;
     // let up_json = await up_resp.json();
     // const { dl_url } = up_json; // the download link to public file
