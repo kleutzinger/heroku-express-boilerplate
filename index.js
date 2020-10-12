@@ -17,6 +17,10 @@ app.set('view engine', 'pug');
 
 app.use(require('serve-favicon')(path.join('web', 'monocle.ico')));
 app.use(express.static('web'));
+if (!fs.existsSync('slp')) {
+  fs.mkdirSync('slp');
+}
+app.use('/slp', express.static('slp'));
 app.use(morgan('tiny'));
 
 const server = app.listen(PORT, () => {

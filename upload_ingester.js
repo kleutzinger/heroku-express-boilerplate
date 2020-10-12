@@ -7,6 +7,7 @@ const { customAlphabet } = require('nanoid/non-secure');
 // prettier-ignore
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_',7);
 const TMPDIR = 'tmp';
+const SLPDIR = 'slp';
 const { existsSync, mkdirSync } = require('fs');
 const fs = require('fs');
 const path = require('path');
@@ -46,13 +47,22 @@ async function processIncomingFile(file, io) {
     // get slippi metadata
     let processed_metadata = getSlippiData(_path);
     // send to public filehost
-    let up_resp = await fetch(process.env.SECRET_UPLOAD_KB, {
-      method : 'POST',
-      body   : genFormData(_path)
-    });
+    // let up_resp = await fetch(process.env.SECRET_UPLOAD_KB, {
+    //   method : 'POST',
+    //   body   : genFormData(_path)
+    // });
+    const hosted_filename = file.path.split('/').pop();
+    await fs.rename(
+      _path,
+      path.join(__dirname, SLPDIR, hosted_filename),
+      (err) => {
+        if (err) throw err;
+      }
+    );
     let is_temp = false;
-    let up_json = await up_resp.json();
-    const { dl_url } = up_json; // the download link to public file
+    // let up_json = await up_resp.json();
+    // const { dl_url } = up_json; // the download link to public file
+    const dl_url = 'https://spectate.kevbot.xyz/slp/' + hosted_filename;
     if (dl_url) {
       console.log(dl_url);
       const nice = niceData(processed_metadata);
@@ -63,7 +73,7 @@ async function processIncomingFile(file, io) {
         is_temp,
         uniq_tag,
         dl_url,
-        hosted_filename : file.path.split('/').pop(),
+        hosted_filename,
         // file,
         filesize        : file.size
       };
@@ -76,6 +86,7 @@ async function processIncomingFile(file, io) {
       throw new Error('upload error: could not get a public dl_url');
     }
   } catch (err) {
+    console.log(err);
     console.log(err.message);
   }
 }
