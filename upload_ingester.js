@@ -57,7 +57,7 @@ async function processIncomingFile(file, io) {
     let is_temp = false;
     // let up_json = await up_resp.json();
     // const { dl_url } = up_json; // the download link to public file
-    const dl_url = 'https://spectate.kevbot.xyz/slp/' + hosted_filename;
+    const dl_url = 'https://replay.kevbot.xyz/slp/' + hosted_filename;
     if (dl_url) {
       console.log(dl_url);
       const nice = niceData(processed_metadata);

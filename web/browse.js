@@ -17,7 +17,7 @@ $(document).ready(function() {
   if (window.location.href.includes('localhost:')) {
     $(document.body).css('background-color', '#add');
     $('#left_column').prepend(
-      `<a href="https://spectate-melee-kb.herokuapp.com/"><h1>~go2live~</h1></a>`
+      `<a href="https://replay.kevbot.xyz/"><h1>~go2live~</h1></a>`
     );
   } else {
     // $(document.body).css('background-color', '#abd');
