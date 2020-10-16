@@ -33,10 +33,10 @@ html
         .column
           //- a(href='/api/history') view games database
           h1 Upload
-          h4 Upload your .slp files here,<br>They will remain on this page for everyone to see and download
+          p Upload your .slp files here by dragging and dropping them from your file explorer to the green box. They should be in your `My Documents/Slippi` directory. You can also click on the green box and select the files from there. They will remain on this page for everyone to see and download
           a(href="https://youtu.be/F8j87ru7X5I") Video Demo
           <form method="post" action="/upload" class="dropzone" id="dropzone"><div class="fallback"><input name="file" type="file" multiple /></div></form>
-          h4 Live Uploads (Links will appear here as they are uploaded by others, refresh to insert into table)
+          //- h4 Live Uploads (Links will appear here as they are uploaded by others, refresh to insert into table)
           div#history_list
     .footer
       //- a(href='/api/history') view games database
