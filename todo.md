@@ -22,6 +22,11 @@ curl -i -F 'file=@hi.txt' https://tmp.ninja/api.php?d=upload
 - [ ] /tournament/id
       i dont think i have to actually group it by tournament
 - [x] make .prettierrc (single quote)
+- [ ] auth
+- [ ] account login/verification (connect a CODE#123 to account)
+- [ ] set drag n drop zone to be on the left so it stays up there on portrait
+- [ ] profile pages
+- [ ] public high score table, just for number of sets uploaded
 
 ## expansion october 27
 
@@ -37,10 +42,12 @@ get people to upload as many .slp files as i can handle
 have them matched and organized automatically
 have them easy to watch from wherever
 API FOR SLIPPI DESKTOP LAUNCHER
+create archiv because youtube takes these down?
 
 how to match replay files to smash.gg sets:
 
 smash gg auto striker crx:
+
 chrome extension autofiller
 saved per character
 show twitch stream "this player is now live"
