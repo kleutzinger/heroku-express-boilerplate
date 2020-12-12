@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 var config = {
-  connectionString        : process.env.DATABASE_URL,
+  connectionString        : process.env.DOKKU_POSTGRES_AQUA_URL,
   ssl                     : {
     rejectUnauthorized : false
   },
