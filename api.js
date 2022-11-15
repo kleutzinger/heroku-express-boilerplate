@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const _ = require('lodash');
+const fs = require('fs')
 const pool = require('./db_setup.js');
 const { default: SlippiGame } = require('@slippi/slippi-js');
 
@@ -43,15 +44,20 @@ async function new_processed_push(obj) {
 
 async function get_upload_history(chronological = false) {
   try {
-    const client = await pool.connect();
-    let text = `SELECT * from slp_history `;
-    if (chronological) {
-      text += 'ORDER BY start_at desc ';
-    }
-    text += ';';
-    resp = await client.query(text);
-    client.release();
-    return resp;
+    // const client = await pool.connect();
+    // let text = `SELECT * from slp_history `;
+    // if (chronological) {
+    //   text += 'ORDER BY start_at desc ';
+    // }
+    // text += ';';
+    // resp = await client.query(text);
+    // client.release();
+    // return resp;
+    let rawdata = fs.readFileSync('/home/kevin/gits/spectate-melee-kb/web/history.json');
+    let rows = JSON.parse(rawdata);
+    console.log(`returing ${rows.length} rows`)
+    const obj = {rows: rows}
+    return obj;
   } catch (err) {
     console.log(err);
     if (typeof client !== 'undefined') {
