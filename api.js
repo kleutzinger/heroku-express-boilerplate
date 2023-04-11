@@ -3,6 +3,7 @@ dotenv.config();
 const _ = require('lodash');
 const pool = require('./db_setup.js');
 const { default: SlippiGame } = require('@slippi/slippi-js');
+const squid = require('./squid_setup.js').squid;
 
 const app = require('express').Router();
 
@@ -20,15 +21,15 @@ async function new_processed_push(obj) {
       VALUES($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `;
-    const values = [
+    const values = {
       hosted_filename,
       dl_url,
       is_temp,
       uniq_tag,
       filesize,
       metadata,
-      nice.start_at
-    ];
+      start_at: nice.start_at
+    }
     const resp = await client.query(text, values);
     client.release();
     // console.log(resp);

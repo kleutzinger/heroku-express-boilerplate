@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@slippi/slippi-js": "^5.1.1",
+    "@squidcloud/client": "^1.0.30",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
@@ -27,6 +28,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "squid_setup": "node squid_setup.js",
     "dev": "nodemon index.js"
   },
   "author": "",
