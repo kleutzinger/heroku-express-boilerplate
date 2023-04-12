@@ -23,6 +23,11 @@ html
       .row
         .column#left_column
           h2 ~Click stage icons to download .slp~
+          if is_logged_in
+            a(href="/profile") Logged in (Profile)
+            a(href="/logout") Log Out
+          else
+            a(href="/login") Please log in to upload
           p (launch with slippi desktop app) 
           .tabulator#tabulator
           img(id="crt_img", width="40%")
