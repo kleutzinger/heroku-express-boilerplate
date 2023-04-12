@@ -8,9 +8,4 @@ const squid = new Squid({
   apiKey: process.env['SQUID_API_KEY'],
 });
 
-(async () => {
-  const data = await squid.collection('slp_history').query().snapshot();
-  console.log(data);
-})();
-
 module.exports = { squid };

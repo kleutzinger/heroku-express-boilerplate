@@ -34,12 +34,12 @@ const uploadRouter = require('./upload_ingester.js')(io);
 app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to our albums Router
 
 const { apiRouter, get_upload_history } = require('./api.js');
+const { squid } = require('./squid_setup.js');
 app.use('/api', apiRouter);
 
-app.get('/', async function(req, res, next) {
+app.get('/', async function (req, res, next) {
   try {
-    const upload_history = await get_upload_history();
-    const rows = upload_history ? upload_history.rows : [];
+    const rows = await get_upload_history(squid);
     res.render('home', { upload_history: JSON.stringify(rows) });
   } catch (error) {
     next(error);

@@ -14,13 +14,6 @@ async function new_processed_push(obj) {
     // prettier-ignore
     let { metadata, nice, uniq_tag, is_temp, dl_url, hosted_filename, filesize } = obj;
     const start_at = Date.parse(nice.start_at);
-    const client = await pool.connect();
-    const text = `
-    INSERT INTO slp_history
-      (hosted_filename, dl_url, is_temp, uniq_tag, filesize, metadata, start_at) 
-      VALUES($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *;
-    `;
     const values = {
       hosted_filename,
       dl_url,
@@ -28,11 +21,13 @@ async function new_processed_push(obj) {
       uniq_tag,
       filesize,
       metadata,
-      start_at: nice.start_at
-    }
-    const resp = await client.query(text, values);
-    client.release();
-    // console.log(resp);
+      start_at: nice.start_at,
+    };
+    console.log(values);
+    const resp = await squid
+      .collection('slp_history', 'replay-posey')
+      .doc()
+      .insert(values);
     return resp;
   } catch (err) {
     console.log(err.message);
@@ -42,23 +37,14 @@ async function new_processed_push(obj) {
   }
 }
 
-async function get_upload_history(chronological = false) {
-  try {
-    const client = await pool.connect();
-    let text = `SELECT * from slp_history `;
-    if (chronological) {
-      text += 'ORDER BY start_at desc ';
-    }
-    text += ';';
-    resp = await client.query(text);
-    client.release();
-    return resp;
-  } catch (err) {
-    console.log(err);
-    if (typeof client !== 'undefined') {
-      client.release();
-    }
-  }
+async function get_upload_history(squid) {
+  const data = await squid
+    .collection('slp_history', 'replay-posey')
+    .query()
+    .sortBy('start_at')
+    .snapshot();
+  const out = data.map((x) => x.data);
+  return out;
 }
 
 async function run_text_values(text, values) {
@@ -74,52 +60,19 @@ async function run_text_values(text, values) {
     }
   }
 }
-(async () => {
-  return;
-  const between_times_text = ` 
--- goal: get all timestamps between time0 and time1 ?
--- where $[minus_time, plus_time]
-
-
-SELECT 
-  CASE WHEN EXISTS 
-    (  SELECT id, start_at, settings_tag from slp_history where ( 
-  start_at >= $1 AND start_at <= $2) 
-)
-  THEN insert into upload_history  
-  ELSE 0
-  END ;
-`;
-  const data = await get_upload_history((chronological = true));
-  const game = data.rows[0];
-  const start_at = Date.parse(game.start_at);
-
-  const values = [
-    new Date(start_at - 5 * 1000),
-    new Date(start_at + 5 * 1000)
-  ];
-
-  console.log(values);
-  // process.exit();
-  var resp = await run_text_values(between_times_text, values);
-  console.log(resp.rows);
-})().catch((e) => {
-  console.log(e);
-  // Deal with the fact the chain failed
-});
 
 app.get('/history', async (req, res) => {
   try {
-    const data = await get_upload_history((chronological = true));
-    res.json(data.rows);
+    const data = await get_upload_history(squid);
+    res.json(data);
   } catch (error) {
     console.log('error getting /history', error.message);
   }
 });
 
 module.exports = {
-  apiRouter          : app,
+  apiRouter: app,
   new_processed_push,
+  run_text_values,
   get_upload_history,
-  run_text_values
 };
