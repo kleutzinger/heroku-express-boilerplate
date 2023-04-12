@@ -62,6 +62,16 @@ function gm_fmt(cell, formatterParams, onRendered) {
   return ret;
 }
 
+function fix_local_dl_url(dl_url) {
+  if (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  ) {
+    return new URL(dl_url).pathname;
+  }
+  return dl_url;
+}
+
 function addDataToSets(sets) {
   return _.map(sets, (set) => {
     const game1 = set.games[0];
@@ -71,7 +81,7 @@ function addDataToSets(sets) {
     set.CHAR = game2chars(game1);
     let game_num = 1;
     for (const game of set.games) {
-      set['G' + game_num] = { icon: game2stg(game), dl_url: game.dl_url };
+      set['G' + game_num] = { icon: game2stg(game), dl_url: fix_local_dl_url(game.dl_url) };
       game_num += 1;
     }
     return set;
