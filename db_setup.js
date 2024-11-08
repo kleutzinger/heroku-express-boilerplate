@@ -1,12 +1,14 @@
 const { Pool } = require('pg');
 var config = {
-  connectionString        : process.env.DOKKU_POSTGRES_AQUA_URL,
-  ssl                     : {
-    rejectUnauthorized : false
-  },
-  max                     : 5,
-  idleTimeoutMillis       : 10000,
-  connectionTimeoutMillis : 2000
+  connectionString: process.env.DOKKU_POSTGRES_AQUA_URL,
+  ssl: process.env.DOKKU_POSTGRES_AQUA_URL.includes('localhost')
+    ? false
+    : {
+        rejectUnauthorized: false,
+      },
+  max: 5,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 2000,
 };
 var pool = new Pool(config);
 
