@@ -1,0 +1,8 @@
+# robots.txt for https://replay.kevbot.xyz/
+
+# Block all crawlers from accessing /slp/
+User-agent: *
+Disallow: /slp/
+
+# Allow everything else
+Allow: /

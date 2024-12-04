@@ -20,8 +20,20 @@ app.use(express.static('web'));
 if (!fs.existsSync('slp')) {
   fs.mkdirSync('slp');
 }
+
+// Middleware to set the X-Robots-Tag header for /slp/ files
+app.use('/slp', (req, res, next) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow');
+  next();
+});
+
 app.use('/slp', express.static('slp'));
 app.use(morgan('tiny'));
+
+app.use('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.sendFile(path.join(__dirname, 'web', 'robots.txt'));
+});
 
 const server = app.listen(PORT, () => {
   console.log(`server listening on port ${PORT}`);
@@ -36,7 +48,7 @@ app.use('/upload', uploadRouter); // Forwards any requests to the /albums URI to
 const { apiRouter, get_upload_history } = require('./api.js');
 app.use('/api', apiRouter);
 
-app.get('/', async function(req, res, next) {
+app.get('/', async function (req, res, next) {
   try {
     const upload_history = await get_upload_history();
     const rows = upload_history ? upload_history.rows : [];
